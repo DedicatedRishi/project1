@@ -1,9 +1,9 @@
-import React from 'react'
+// import React from 'react'
 
-const Footer = () => {
-  return (
-    <div>Akshay will desing this footer part</div>
-  )
-}
+// const Footer = () => {
+//   return (
+//     <div>Akshay will desing this footer part</div>
+//   )
+// }
 
-export default Footer
+// export default Footer
