@@ -75,7 +75,7 @@ function Home() {
     <iframe
       width="560"
       height="315"
-      src="https://www.youtube.com/embed/VIDEO_ID"
+      src="https://www.youtube.com/embed/ly8orBNiNQM"
       title="YouTube video"
       frameborder="0"
       allowfullscreen
@@ -90,7 +90,7 @@ function Home() {
   </YoutubeVideo>
 
   <Banner>
-  <img src="/img/banner2.jpg" alt="Banner" className="banner-img" />
+  <img src="/img/banner3.jpg" alt="Banner" className="banner-img" />
         <div className="overlay">
           <h1>"Join the Competition"</h1>
           <p>The wording should be clear, concise, and persuasive, guiding users through their journey on your website.</p>
@@ -106,10 +106,9 @@ function Home() {
 
 const Wrapper = styled.section`
   /* index.css */
-  body {
-  background: black; /* Set the background color of the entire website to black */
-}
+  background-color: rgba(205, 217, 230, 0.9);
 
+  
 
   .card {
     text-align: center;
@@ -142,11 +141,12 @@ const Wrapper = styled.section`
 }
   
   .home-subtitle {
-    font-size: 25px; /* Set the subtitle font size */
+    font-size: 20px; /* Set the subtitle font size */
     color: #0077cc; /* Set the subtitle text color to a vibrant blue */
     text-align: center; /* Move the subtitle to the left */
     font-style: italic;
   margin-top: 10px;
+  font-weight: bold;
   }
   
 `;
@@ -217,7 +217,7 @@ const YoutubeVideo = styled.div`
   padding: 60px;
   border: 3px solid #333; /* Add a border for visual appeal */
   border-radius: 10px; /* Optional: Adds rounded corners */
-  background-color: rgba(205, 217, 230, 0.9); /* Semi-transparent white background */
+  background-color: rgb(0, 56, 168, 0.8); /* Semi-transparent white background */
   box-sizing: border-box;
   margin-left: 90px;
   margin-right: 80px;
@@ -231,13 +231,14 @@ const YoutubeVideo = styled.div`
   .right-content {
     width: 45%; /* Adjust the width of the text content */
     text-align: center;
-    color: #333; /* Adjust the text color */
+    color: #fff; /* Adjust the text color */
   }
 
   .right-content h2 {
     font-size: 34px;
     margin-bottom: 10px;
     font-weight: bold;
+    text-align: left;
   }
 
   .right-content p {
@@ -248,6 +249,7 @@ const YoutubeVideo = styled.div`
 
 const Banner = styled.div`
   position: relative;
+  padding-top: 100px;
   text-align: center;
   margin-top: 20px; /* Adjust margin as needed */
 
@@ -260,12 +262,12 @@ const Banner = styled.div`
 
   .overlay {
     position: absolute;
-    top: 50%;
+    top: 64%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
     text-align: center;
-    color: #fff; /* Adjust text color as needed */
+    color: #333; /* Adjust text color as needed */
   }
 
   .overlay h1 {
