@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components';
+import {NavLink} from 'react-router-dom';
 const Header = () => {
     return (
         <Wrapper>
             <nav className="navbar navbars navbar-expand-lg navbar-light bg-light ">
                 <div className="container-fluid">
-                    <a className="navbar-brand nav_brands" href="#">ARCH<span className="nav_text mx-2">Our Arch competetion</span></a>
+                    <NavLink className="navbar-brand nav_brands" to={'/'}>ARCH<span className="nav_text mx-2">Our Arch competetion</span></NavLink>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
@@ -13,13 +14,13 @@ const Header = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#">Aboutus</a>
+                            <NavLink className="nav-link active" aria-current="page" href="#" >Aboutus</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Services</a>
+                            <NavLink className="nav-link" href="#">Services</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Rules</a>
+                            <NavLink className="nav-link" href="#">Rules</NavLink>
                         </li>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,7 +43,7 @@ const Header = () => {
                             </ul>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link " href="#" tabIndex="-1" aria-disabled="true">Contacts</a>
+                            <NavLink className="nav-link " href="#" tabIndex="-1" aria-disabled="true">Contacts</NavLink>
                         </li>
                     </ul>
                 </div>
