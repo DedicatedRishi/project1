@@ -1,9 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useMediaQuery } from "react-responsive";
+
 
 const About = () => {
+    
+
   return (
     <Wrapper>
+      <div className='detail'>
       <div className='about'>
         <img src='src/pages/image2.jpg' width="1000" height="200" ></img>
       </div>
@@ -30,13 +35,13 @@ const About = () => {
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="src/pages/image1.webp" class="d-block w-100" alt="..." height="500"></img>
+              <img src="src/pages/image1.webp" class="d-block w-100" alt="imag1" height="500"></img>
             </div>
             <div class="carousel-item">
-              <img src="src/pages/image1.webp" class="d-block w-100" alt="..." height="500"></img>
+              <img src="src/pages/image1.webp" class="d-block w-100" alt="imag2" height="500"></img>
             </div>
             <div class="carousel-item">
-              <img src="src/pages/image1.webp" class="d-block w-100" alt="..." height="500"></img>
+              <img src="src/pages/image1.webp" class="d-block w-100" alt="img3" height="500"></img>
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -51,12 +56,26 @@ const About = () => {
         </div>
       </div>
 
+      <div className='judges'>
+        <h1>Judge Panel</h1>
+
+        <div class="container">
+      <div class="image"> <img src="https://i.pinimg.com/736x/fb/14/36/fb14367fee180889b66e95d3a0659a4a.jpg" alt="This is my image." height="400px"/> <h2>Name</h2></div> 
+      <div class="image"> <img src="https://i.pinimg.com/564x/30/33/4c/30334cb60ebcb05da34f6fc9bd2a9d8e.jpg" alt="This is my second image." height="400px"/> <h2>Name</h2></div> 
+      <div class="image"> <img src="https://i.pinimg.com/564x/af/e3/eb/afe3eb181af33e1af29ec78448631382.jpg" alt="My third image." height="400px"/> <h2>Name</h2></div>
+      <div class="image"> <img src="https://i.pinimg.com/564x/30/33/4c/30334cb60ebcb05da34f6fc9bd2a9d8e.jpg" alt="This is my second image." height="400px"/><h2>Name</h2> </div>
+      <div class="image"> <img src="https://i.pinimg.com/564x/30/33/4c/30334cb60ebcb05da34f6fc9bd2a9d8e.jpg" alt="This is my second image." height="400px"/><h2>Name</h2> </div>    
+    </div>
+      </div>
+      </div>
     </Wrapper>
   )
 }
 
 const Wrapper = styled.section`
-
+.detail{
+  background-color :skyblue;
+}
 .about{
   margin-right: 200px;
   margin-left: 200px;
@@ -66,13 +85,17 @@ const Wrapper = styled.section`
   margin-right: 200px;
   margin-left: 200px;
   display : flex;
+  
 }
-h2{
+h1, h2{
   text-align : center;
 font-family : Cursive;
+text-decoration: underline;
 }
 p{
   font : 10px;
+  margin-top : 20px;
+  margin-left :10px;
 }
 
 .history
@@ -84,6 +107,26 @@ p{
   margin-top : 100px;
 }
 
+.judges{
+  margin-top : 50px;
+  background-color : skyblue;
+}
+}
+
+.container {
+  align-items: center; 
+  float: left;
+  margin-left: 15px;
+  margin-right: 15px;
+  display : flex;
+  
+}
+.image{
+    float: left;
+  padding: 5px;
+  margin-top : 10px;
+  
+ 
 `;
 
 export default About
