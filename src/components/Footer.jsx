@@ -23,7 +23,7 @@ const Footer =()=>{
 const Wrapper = styled.section`
   footer{
     width: 100%;
-    position: absolute;
+    margin-top:2.4rem;
     bottom: 0;
     text-align: center;
     background-color:black;
@@ -33,6 +33,9 @@ const Wrapper = styled.section`
     text-align: center;
     justify-content: center;
     flex-direction: column;
+}
+div{
+  padding-top: 4rem;
 }
  .icon{
     margin-left:9px;

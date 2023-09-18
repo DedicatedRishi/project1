@@ -1,9 +1,6 @@
-import React from 'react';
+import React from 'react'
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-
-
-
 const Header = () => {
     return (
         <Wrapper>
@@ -17,10 +14,13 @@ const Header = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <NavLink className="nav-link active" aria-current="page" to={"/footer"}>Aboutus</NavLink>
+                            <NavLink className="nav-link active" aria-current="page" to={"/"}>Home</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="nav-link" to={"/"}>Services</NavLink>
+                            <NavLink className="nav-link active" aria-current="page" to={"/about"}>About</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">Services</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link" href="#">Rules</a>
@@ -52,7 +52,7 @@ const Header = () => {
                 </div>
             </nav>
         </Wrapper>
-    )
+      )
 }
 const Wrapper = styled.section`
 .navbar {
@@ -73,6 +73,14 @@ const Wrapper = styled.section`
     font-size: 14px;
     font-weight: 700;
   }
-`;
-
+  
+  .dropdown:hover>.dropdown-menu {
+    display: block;
+  }
+  
+  .dropdown>.dropdown-toggle:active {
+    
+      pointer-events: none;
+  }
+`
 export default Header;
