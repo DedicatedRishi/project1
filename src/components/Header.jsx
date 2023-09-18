@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 const Header = () => {
     return (
         <Wrapper>
@@ -23,13 +23,17 @@ const Header = () => {
                             <NavLink className="nav-link" href="#">Rules</NavLink>
                         </li>
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Categories
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a className="dropdown-item" href="#">School Design</a></li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li><a className="dropdown-item" href="#">Landscape Design</a></li>
+                                <li>
+                                    <NavLink className="dropdown-item" to={'/schooldesign'}>School Design</NavLink>
+                               </li>
+                                <li><hr className="dropdown-divider"/></li>
+                                <li>
+                                    <NavLink className="dropdown-item" to={'/landscapedesign'}>Landscape Design</NavLink>
+                                </li>
                             </ul>
                         </li>
                         <li className="nav-item dropdown">
@@ -49,7 +53,7 @@ const Header = () => {
                 </div>
             </nav>
         </Wrapper>
-      )
+    )
 }
 const Wrapper = styled.section`
 .navbar {
@@ -79,5 +83,13 @@ const Wrapper = styled.section`
     
       pointer-events: none;
   }
+  .dropdown-menu > li >a:hover {
+        background-color :#0d6efd;
+        color:#fff;
+   }
+   .dropdown-item{
+       background-color :#fff;
+       color:black;
+   }
 `
 export default Header;

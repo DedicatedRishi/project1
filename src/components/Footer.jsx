@@ -21,8 +21,8 @@ const Footer = () => {
 const Wrapper = styled.section`
 footer{
      width: 100%;
-     position: absolute;
-     bottom: 0;
+    //  position: absolute;
+    //  bottom: 0;
      text-align: center;
      background-color:black;
      color: #fff;
