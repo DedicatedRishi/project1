@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import building_1 from '../assets/building_1.jpg';
 import indoor_1 from '../assets/indoor_1.jpg';
@@ -7,10 +7,47 @@ import indoor_6 from '../assets/indoor_6.jpg';
 import outdoor_1 from '../assets/outdoor_1.jpg';
 import outdoor_2 from '../assets/outdoor_2.jpg';
 import outdoor_3 from '../assets/outdoor_3.jpg';
+
+const indoordata = [
+    {
+        indoor_img: indoor_1,
+        indoor_title: "VR Hadeset",
+        indoor_text: "We offer various indoor facilities"
+    },
+    {
+        indoor_img: indoor_3,
+        indoor_title: "Library",
+        indoor_text: "We offer various indoor facilities"
+    },
+    {
+        indoor_img: indoor_6,
+        indoor_title: "Class Room",
+        indoor_text: "We offer various indoor facilities"
+    },
+]
+const outdoordata = [
+    {
+        outdoor_img: outdoor_2,
+        outdoor_title: "Running",
+        outdoor_text: "Our outdoor facilities include sports fields and recreational areas."
+    },
+    {
+        outdoor_img: outdoor_1,
+        outdoor_title: "Football",
+        outdoor_text: "Our outdoor facilities include sports fields and recreational areas."
+    },
+    {
+        outdoor_img: outdoor_3,
+        outdoor_title: "Class Room",
+        outdoor_text: "Our outdoor facilities include sports fields and recreational areas."
+    }
+]
 const SchoolDesign = () => {
+    const [indoor, setIndoor] = useState(indoordata);
+    const [outdoor, setOutdoor] = useState(outdoordata)
+
     return (
         <Wrapper>
-
             <section class="school-banner">
                 <h1>Welcome to Our School</h1>
                 <p>Discover Our Spacious Campus</p>
@@ -20,40 +57,23 @@ const SchoolDesign = () => {
                 <section className="indoor">
                     <div class="container">
                         <h2 class="mt-5 mb-4 text-center">Our Facilities</h2>
-
                         <div class="row">
                             <h3 className="">Indoor Facilities</h3>
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="card facility-card">
-                                    <img src={indoor_1} alt="Facility 1" />
-                                    <div class="card-body">
-                                        <h5 class="card-title">VR Hadeset</h5>
-                                        <p class="card-text">We offer various indoor facilities</p>
+
+                            {
+                                indoor.map((item, i) => (
+
+                                    <div class="col-lg-4 col-md-6 mb-4">
+                                        <div class="card facility-card">
+                                            <img src={item.indoor_img} alt="Facility 1" />
+                                            <div class="card-body">
+                                                <h5 class="card-title">{item.indoor_title}</h5>
+                                                <p class="card-text">{item.indoor_text}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-
-
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="card facility-card">
-                                    <img src={indoor_3} alt="Facility 2" />
-                                    <div class="card-body">
-                                        <h5 class="card-title">Library</h5>
-                                        <p class="card-text">We offer various indoor facilities</p>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="card facility-card">
-                                    <img src={indoor_6} alt="Facility 3" />
-                                    <div class="card-body">
-                                        <h5 class="card-title">Class Room</h5>
-                                        <p class="card-text">We offer various indoor facilities</p>
-                                    </div>
-                                </div>
-                            </div>
+                                ))
+                            }
                         </div>
                     </div>
                 </section>
@@ -62,42 +82,24 @@ const SchoolDesign = () => {
                     <div class="container">
                         <div class="row">
                             <h3 className="">Outdoor Facilities</h3>
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="card facility-card">
-                                    <img src={outdoor_2} alt="Facility 1" />
-                                    <div class="card-body">
-                                        <h5 class="card-title">Running</h5>
-                                        <p class="card-text">Our outdoor facilities include sports fields and recreational areas.</p>
+                            {
+                                outdoor.map((item, i) => (
+                                    <div class="col-lg-4 col-md-6 mb-4">
+                                        <div class="card facility-card">
+                                            <img src={item.outdoor_img} alt="Facility 1" />
+                                            <div class="card-body">
+                                                <h5 class="card-title">{item.outdoor_title}</h5>
+                                                <p class="card-text">{item.outdoor_text}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-
-
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="card facility-card">
-                                    <img src={outdoor_1} alt="Facility 2" />
-                                    <div class="card-body">
-                                        <h5 class="card-title">Football</h5>
-                                        <p class="card-text">Our outdoor facilities include sports fields and recreational areas.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="card facility-card">
-                                    <img src={outdoor_3} alt="Facility 3" />
-                                    <div class="card-body">
-                                        <h5 class="card-title">Badminton</h5>
-                                        <p class="card-text">Our outdoor facilities include sports fields and recreational areas.</p>
-                                    </div>
-                                </div>
-                            </div>
+                                ))
+                            }
                         </div>
                     </div>
                 </section>
             </div>
-     </Wrapper>
+        </Wrapper>
     )
 }
 
