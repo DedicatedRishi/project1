@@ -79,8 +79,7 @@ function Home() {
       <div className="youtube-video">
     {/* Add your YouTube video here */}
     <iframe
-      width="560"
-      height="315"
+     
       src="https://www.youtube.com/embed/ly8orBNiNQM"
       title="YouTube video"
       frameborder="0"
@@ -112,17 +111,22 @@ function Home() {
 
 const Wrapper = styled.section`
   /* index.css */
-  background-color: rgba(205, 217, 230, 0.9);
-  margin-bottom: 2.2rem;
+  body {
+  overflow-x: hidden;
   
 
+
+  background-color: rgba(205, 217, 230, 0.9);
+  margin-bottom: 2.2rem;}
+  
+    
   .card {
     text-align: center;
     padding: 20px;
     border-radius: 10px; /* Optional: Adds rounded corners to the card */
-    background: rgba(205, 217, 230, 0.9); /* Semi-transparent white background for the card */
+    background: rgba(205, 217, 230, 0.9); 
     width: 40%; /* Adjust the width of the card as needed */
-  height: 52%;
+  height: 58%;
   top: 30%;
   left: 30%;
   }
@@ -154,6 +158,37 @@ const Wrapper = styled.section`
   
   font-weight: bold;
   }
+  @media (max-width: 1045px){
+    ${'' /* .card{
+      height: 45%;
+
+    } */}
+    .home-title {
+    font-size: 30px; 
+    }
+  }
+  @media (max-width: 768px) {
+    
+    .homepage {
+      background-size: cover; /* Ensure background image fits on smaller screens */
+    }
+
+    .card {
+      width: 90%; /* Adjust the width for smaller screens */
+      margin: auto; /* Center the card */
+      top: unset; /* Remove top positioning */
+      left: unset; /* Remove left positioning */
+    }
+
+    /* Reduce font sizes for smaller screens */
+    .home-title {
+      font-size: 24px;
+    }
+
+    .home-subtitle {
+      font-size: 14px;
+    }
+  }
   
 `;
 
@@ -166,6 +201,8 @@ const CarouselHeading = styled.div`
   font-weight: bold;
   color: #333;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+
 `;
 
 
@@ -202,6 +239,11 @@ padding-top: 4%;
   .carousel-caption p {
     color: black; /* Font color for the carousel captions */
   }
+  @media (max-width: 768px) {
+    width: 90%; /* Adjust the width for smaller screens */
+    margin: auto; /* Center the carousel */
+  }
+
 `;
 {/*Heading below wrapper*/}
 
@@ -213,6 +255,14 @@ const VideoHeading = styled.div`
   font-weight: bold;
   color: #333;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+
+
+  @media (max-width: 768px) {
+    width: 90%; /* Adjust the width for smaller screens */
+    margin: auto; /* Center the carousel */
+  }
+
 `;
 
 const YoutubeVideo = styled.div`
@@ -251,6 +301,44 @@ const YoutubeVideo = styled.div`
     text-align: left;
     font-size: 18px;
   }
+
+  @media (max-width: 768px) {
+    flex-direction: column; /* Stack video and content on smaller screens */
+    align-items: center; /* Center align on smaller screens */
+    margin-left: 0; /* Remove left margin */
+    margin-right: 0; /* Remove right margin */
+   
+  margin-bottom: 30px;
+  .right-content p {
+ 
+ 
+  }
+  
+  
+  .youtube-video {
+    width: 60%; /* Adjust the width of the video container */
+  }
+
+  .right-content {
+    width: 45%; /* Adjust the width of the text content */
+    text-align: center;
+    color: #fff; /* Adjust the text color */
+  }
+
+  .right-content h2 {
+    font-size: 34px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .right-content p {
+    text-align: left;
+    font-size: 18px;
+  }
+
+  }
+
 `;
 
 const Banner = styled.div`
@@ -295,6 +383,18 @@ const Banner = styled.div`
     border-radius: 5px; /* Optional: Adds rounded corners */
     font-size: 20px; /* Adjust button font size */
     cursor: pointer;
+  }
+  @media (max-width: 768px){
+    .overlay h1 {
+    font-size: 45px;
+    padding-top: 10px;
+    }
+    .banner-img {
+    /* Add styles for your banner image */
+    width: 100%; /* Adjust width as needed */
+    height: 15rem; /* Maintain aspect ratio */
+    border-radius: 10px; /* Optional: Adds rounded corners */
+  }
   }
 `;
 
