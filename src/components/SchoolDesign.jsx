@@ -1,45 +1,47 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import building_1 from '../assets/building_1.jpg';
+import design_img from '../assets/design_img.jpg';
 import indoor_1 from '../assets/indoor_1.jpg';
 import indoor_3 from '../assets/indoor_3.jpg';
 import indoor_6 from '../assets/indoor_6.jpg';
 import outdoor_1 from '../assets/outdoor_1.jpg';
 import outdoor_2 from '../assets/outdoor_2.jpg';
 import outdoor_3 from '../assets/outdoor_3.jpg';
-
+import printed from '../assets/printed.jpg';
+import home_architecture from '../assets/home_architecture.jpg';
+import house2 from '../assets/house2.jpg';
 const indoordata = [
     {
-        indoor_img: indoor_1,
-        indoor_title: "VR Hadeset",
+        indoor_img:home_architecture,
+        indoor_title: "3d Printing",
         indoor_text: "We offer various indoor facilities"
     },
     {
-        indoor_img: indoor_3,
-        indoor_title: "Library",
+        indoor_img: home_architecture,
+        indoor_title: "Home Architecture",
         indoor_text: "We offer various indoor facilities"
     },
     {
-        indoor_img: indoor_6,
-        indoor_title: "Class Room",
+        indoor_img:house2,
+        indoor_title: "House",
         indoor_text: "We offer various indoor facilities"
     },
 ]
 const outdoordata = [
     {
-        outdoor_img: outdoor_2,
-        outdoor_title: "Running",
-        outdoor_text: "Our outdoor facilities include sports fields and recreational areas."
+        outdoor_img:printed,
+        outdoor_title: "3d printing",
+        outdoor_text: "Our outdoor facilities include fields and recreational areas."
     },
     {
-        outdoor_img: outdoor_1,
-        outdoor_title: "Football",
-        outdoor_text: "Our outdoor facilities include sports fields and recreational areas."
+        outdoor_img: design_img,
+        outdoor_title: "3d printing",
+        outdoor_text: "Our outdoor facilities include fields and recreational areas."
     },
     {
-        outdoor_img: outdoor_3,
-        outdoor_title: "Class Room",
-        outdoor_text: "Our outdoor facilities include sports fields and recreational areas."
+        outdoor_img: printed,
+        outdoor_title: "3d printing",
+        outdoor_text: "Our outdoor facilities include fields and recreational areas."
     }
 ]
 const SchoolDesign = () => {
@@ -49,9 +51,9 @@ const SchoolDesign = () => {
     return (
         <Wrapper>
             <section class="school-banner">
-                <h1>Welcome to Our School</h1>
-                <p>Discover Our Spacious Campus</p>
-                <p>School is an educational institution designed to provide learning spaces and learning environments.Campus Area Size is 22,000 sq. ft</p>
+                <h1>We Design Your Space</h1>
+                <p>Discover Our Spacious to Build Your Own Space</p>
+                
             </section>
             <div className="">
                 <section className="indoor">
@@ -106,7 +108,7 @@ const SchoolDesign = () => {
 const Wrapper = styled.section`
  
  .school-banner {
-    background:rgba(0,0,0,0.5)url(${building_1});
+    background:rgba(0,0,0,0.5)url(${design_img});
     background-size: cover;
     background-position: center;
     height: 500px; 
