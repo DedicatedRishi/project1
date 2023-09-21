@@ -1,47 +1,43 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import design_img from '../assets/design_img.jpg';
-import indoor_1 from '../assets/indoor_1.jpg';
-import indoor_3 from '../assets/indoor_3.jpg';
-import indoor_6 from '../assets/indoor_6.jpg';
-import outdoor_1 from '../assets/outdoor_1.jpg';
-import outdoor_2 from '../assets/outdoor_2.jpg';
-import outdoor_3 from '../assets/outdoor_3.jpg';
+import outarchitecture from '../assets/outarchitecture.jpg';
 import printed from '../assets/printed.jpg';
 import home_architecture from '../assets/home_architecture.jpg';
 import house2 from '../assets/house2.jpg';
+
 const indoordata = [
     {
         indoor_img:home_architecture,
         indoor_title: "3d Printing",
-        indoor_text: "We offer various indoor facilities"
+        indoor_text: "Look Various Indoor Facilities"
     },
     {
-        indoor_img: home_architecture,
+        indoor_img: house2,
         indoor_title: "Home Architecture",
-        indoor_text: "We offer various indoor facilities"
+        indoor_text: "Look Various Indoor Facilities"
     },
     {
-        indoor_img:house2,
+        indoor_img:home_architecture,
         indoor_title: "House",
-        indoor_text: "We offer various indoor facilities"
+        indoor_text: "Look Various Indoor Facilities"
     },
 ]
 const outdoordata = [
     {
         outdoor_img:printed,
         outdoor_title: "3d printing",
-        outdoor_text: "Our outdoor facilities include fields and recreational areas."
+        outdoor_text: "Outdoor Facilities Include Fields and Recreational Areas."
     },
     {
         outdoor_img: design_img,
         outdoor_title: "3d printing",
-        outdoor_text: "Our outdoor facilities include fields and recreational areas."
+        outdoor_text: "Outdoor Facilities Include Fields and Recreational Areas."
     },
     {
-        outdoor_img: printed,
+        outdoor_img:outarchitecture,
         outdoor_title: "3d printing",
-        outdoor_text: "Our outdoor facilities include fields and recreational areas."
+        outdoor_text: "Outdoor Facilities Include Fields and Recreational Areas."
     }
 ]
 const SchoolDesign = () => {
@@ -51,14 +47,13 @@ const SchoolDesign = () => {
     return (
         <Wrapper>
             <section class="school-banner">
-                <h1>We Design Your Space</h1>
-                <p>Discover Our Spacious to Build Your Own Space</p>
-                
+                <h1>Design Your Space</h1>
+                <p>Discover Spacious to Build Your Own Space</p>
             </section>
             <div className="">
                 <section className="indoor">
                     <div class="container">
-                        <h2 class="mt-5 mb-4 text-center">Our Facilities</h2>
+                        <h2 class="mt-5 mb-4 text-center">Facilities</h2>
                         <div class="row">
                             <h3 className="">Indoor Facilities</h3>
 
