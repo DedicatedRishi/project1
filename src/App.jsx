@@ -1,12 +1,23 @@
 import React from 'react'
-import Home from './pages/Home'
-import About from './pages/About';
+import Footer from './components/Footer'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import Header from './components/Header'
+import About from './pages/About'
+import Rules from './pages/Rules'
+import Contact from './pages/Contact'
+
 
 const App = () => {
   return (
-   <>
-   <About />
-    </>
+   <BrowserRouter>
+   <Header />
+      <Routes > 
+        
+        <Route path='/footer' element={<Footer />} />
+      </Routes>
+      <Contact />
+      <Footer />
+    </BrowserRouter>
   )
   
 }
