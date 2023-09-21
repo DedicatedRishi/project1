@@ -161,7 +161,8 @@ function Home() {
 
     <div class="mt-4">
       <h2>Deadline:</h2>
-      <p>Last Date for Submission: [Date to be announced]</p>
+      <p>Last Date for Submission:  31st December 
+        2023</p>
     </div>
 
     <div class="mt-4">
