@@ -1,7 +1,41 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
+
+
 function Home() {
+
+    // Define the target date for the countdown (replace with your desired date)
+    const targetDate = new Date("2023-12-31T23:59:00").getTime();
+
+    // Calculate the remaining time and update it every second
+    const calculateTimeRemaining = () => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+  
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  
+      return {
+        days,
+        hours,
+        minutes,
+        seconds
+      };
+    };
+  
+    const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining);
+  
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setTimeRemaining(calculateTimeRemaining());
+      }, 1000);
+  
+      return () => clearInterval(timer);
+    }, []); // Run this effect only once
+
   return (
     <Wrapper>
     <div className="homepage"> 
@@ -32,21 +66,21 @@ function Home() {
           </div>
           <div className="carousel-inner">
             <div className="carousel-item active">
-              <img src="/img/img3.jpg" className="d-block w-100" alt="slide1" />
+              <img src="/pratik/images/img3.jpg" className="d-block w-100" alt="slide1" />
               <div className="carousel-caption d-none d-md-block">
                 <h3>Discover Inspiring Architectural Designs</h3>
                 <p>Explore a world of innovation and creativity in architecture.</p>
               </div>
             </div>
             <div className="carousel-item">
-              <img src="/img/img1.jpg" className="d-block w-100" alt="slide2" />
+              <img src="/pratik/images/img1.jpg" className="d-block w-100" alt="slide2" />
               <div className="carousel-caption d-none d-md-block">
                 <h3>Join the Competition Today!</h3>
                 <p>Showcase your architectural prowess and win exciting prizes.</p>
               </div>
             </div>
             <div className="carousel-item">
-              <img src="/img/img2.jpg" className="d-block w-100" alt="slide3" />
+              <img src="/pratik/images/img2.jpg" className="d-block w-100" alt="slide3" />
               <div className="carousel-caption d-none d-md-block">
                 <h3>Collaborate and Innovate</h3>
                 <p>Collaborate with fellow architects and shape the future of design.</p>
@@ -70,6 +104,8 @@ function Home() {
 
 <YoutubeVideo>
 
+
+
       <div className="youtube-video">
     {/* Add your YouTube video here */}
     <iframe
@@ -88,9 +124,74 @@ function Home() {
     <p>Encourage users to watch <br/> the video by featuring an attractive thumbnail or a video play button overlay on the video poster image.</p>
   </div>
   </YoutubeVideo>
+<Details>
+  <div class="container mt-5">
+    <div class="text-center">
+      <h1>Welcome to the Architecture Design Competition</h1>
+      <p>Submit your designs for a chance to win exciting prizes!</p>
+    </div>
+
+    <div class="mt-4">
+      <h2>Eligibility:</h2>
+      <ul>
+        <li>All students must be currently enrolled in architecture colleges.</li>
+        <li>Participation can be individual or in a team.</li>
+        <li>Maximum team size: 4 members.</li>
+      </ul>
+    </div>
+
+    <div class="mt-4">
+      <h2>Judgement:</h2>
+      <ul>
+        <li>Designs will be judged by a panel of experienced architects appointed by XYZ organisation.</li>
+        <li>Three top designs in both categories will be awarded.</li>
+      </ul>
+    </div>
+
+    <div class="mt-4">
+      <h2>Prizes:</h2>
+      <p>Selected designs in each category will receive a cash prize of 50,000/-.</p>
+    </div>
+
+    <div class="mt-4">
+      
+      <p class="small"><strong>Note :</strong> Designs, once submitted and selected, will become the property of XYZ Organisation. The
+        organisation holds the right to use them for expansion, promotion, and construction.</p>
+    </div>
+
+    <div class="mt-4">
+      <h2>Deadline:</h2>
+      <p>Last Date for Submission: [Date to be announced]</p>
+    </div>
+
+    <div class="mt-4">
+  <h2>Countdown Timer:</h2>
+  <div id="countdown">
+  <div className="countdown-item">
+          <span className="countdown-value">{timeRemaining.days}</span>
+          <span className="countdown-label">Days</span>
+        </div>
+        <div className="countdown-item">
+          <span className="countdown-value">{timeRemaining.hours}</span>
+          <span className="countdown-label">Hours</span>
+        </div>
+        <div className="countdown-item">
+          <span className="countdown-value">{timeRemaining.minutes}</span>
+          <span className="countdown-label">Minutes</span>
+        </div>
+        <div className="countdown-item">
+          <span className="countdown-value">{timeRemaining.seconds}</span>
+          <span className="countdown-label">Seconds</span>
+        </div>
+  </div>
+</div>
+
+
+  </div>
+  </Details>
 
   <Banner>
-  <img src="/img/banner3.jpg" alt="Banner" className="banner-img" />
+  <img src="/pratik/images/banner3.jpg" alt="Banner" className="banner-img" />
         <div className="overlay">
           <h1>"Join the Competition"</h1>
           <p>The wording should be clear, concise, and persuasive, guiding users through their journey on your website.</p>
@@ -106,6 +207,7 @@ function Home() {
 
 const Wrapper = styled.section`
   /* index.css */
+  
   background-color: rgba(205, 217, 230, 0.9);
 
   
@@ -120,8 +222,11 @@ const Wrapper = styled.section`
   top: 30%;
   left: 30%;
   }
+
+
+  
   .homepage {
-  background: url('/img/background.jpg') no-repeat center center;
+  background: url("/pratik/images/background.jpg") no-repeat center center;
  background-size: cover;
  position: relative;
  /* Adjust the size percentage as needed */
@@ -148,6 +253,36 @@ const Wrapper = styled.section`
   margin-top: 10px;
   font-weight: bold;
   }
+
+   /* Mobile Responsive */
+
+   @media (max-width: 576px) {
+  .homepage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .card {
+    left: -0%;
+  margin-bottom: 100%;
+    text-align: center;
+    padding: 50px;
+    border-radius: 30px;
+    background: rgba(205, 217, 230, 0.9);
+    width: 80%; /* Adjust the width of the card for smaller screens */
+  }
+
+  .home-title {
+    font-size: 30px; /* Adjust the title font size for smaller screens */
+  }
+
+  .home-subtitle {
+    font-size: 16px; /* Adjust the subtitle font size for smaller screens */
+  }
+}
+
   
 `;
 
@@ -207,6 +342,11 @@ const VideoHeading = styled.div`
   font-weight: bold;
   color: #333;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+
+  @media (max-width: 576px) {
+    font-size: 24px !important;
+  }
 `;
 
 const YoutubeVideo = styled.div`
@@ -239,12 +379,114 @@ const YoutubeVideo = styled.div`
     margin-bottom: 10px;
     font-weight: bold;
     text-align: left;
+   
   }
 
   .right-content p {
     text-align: left;
     font-size: 18px;
   }
+
+  
+  @media (max-width: 576px) {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 20px;
+    .youtube-video {
+      iframe {
+        width: 330%; /* Adjust the width of the video container for smaller screens */
+        height:30vh; /* Adjust the height of the video container for smaller screens */
+      }
+      margin-bottom: 80%;
+    }
+    .right-content {
+      width: 100%;
+      margin-top: 100%;
+      margin-right: 20%;
+      
+    }
+    .right-content h2 {
+      font-size: 24px;
+      text-align: center;
+
+    }
+    .right-content p {
+      font-size: 16px;
+      text-align: center;
+
+    }
+  }
+  
+`;
+
+const Details = styled.div`
+  .container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color:  rgb(0, 56, 168, 0.8);
+  border-radius: 10px;
+  border: 3px solid #333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.text-center {
+  text-align: center;
+}
+
+h1 {
+  font-size: 2em;
+  color: #fff;
+}
+
+p {
+  font-size: 1.2em;
+  color: #fff;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+li {
+  font-size: 1.1em;
+  color: #fff;
+}
+
+h2 {
+  font-size: 1.5em;
+  color: #fff;
+  margin-top: 15px;
+}
+
+.small {
+  font-size: 0.9em;
+  color: #fff;
+}
+
+/* Adjusting margins and paddings */
+.mt-4 {
+  margin-top: 20px;
+}
+
+.countdown-item {
+    color: red; /* Set the countdown item color to red */
+    font-size: 24px; /* Adjust the font size of the countdown value */
+    font-weight: bold; /* Make the countdown value bold */
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 20px;
+    border-radius: 50%; /* Create a circular appearance */
+    background-color: rgba(0, 0, 0, 0.1); /* Add a background for contrast */
+  }
+
+  .countdown-label {
+    font-size: 16px; /* Adjust the font size of the countdown label */
+    display: block; /* Ensure labels appear on a new line */
+  }
+
+/* Optional: Add more styling as per your preference */
+
 `;
 
 const Banner = styled.div`
@@ -289,6 +531,36 @@ const Banner = styled.div`
     border-radius: 5px; /* Optional: Adds rounded corners */
     font-size: 20px; /* Adjust button font size */
     cursor: pointer;
+  }
+
+  @media (max-width: 576px) {
+    padding-top: 50px;
+
+    .banner-img {
+      width: 100%; /* Adjust width to fill the container */
+    max-width: none;
+      border-radius: 0; /* Adjust as needed for the image */
+    }
+
+    .overlay {
+      top: 70%; /* Adjust as needed to center the overlay */
+    }
+
+    .overlay h1 {
+      font-size: 26px; /* Adjust heading font size */
+      margin-bottom: 3px; /* Adjust margin as needed */
+    }
+
+    .overlay p {
+      font-size: 13px; /* Adjust paragraph font size */
+      margin-bottom: 1px; /* Adjust margin as needed */
+    }
+
+    .register-button {
+      padding: 5px 16px; /* Adjust padding as needed */
+      font-size: 10px; /* Adjust button font size */
+   
+   margin-bottom: 8px; }
   }
 `;
 
