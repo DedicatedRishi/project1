@@ -103,6 +103,7 @@ const About = () => {
 
 const Wrapper = styled.section`
 
+  
   body {
     overflow-x: hidden;
   }

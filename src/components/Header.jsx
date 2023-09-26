@@ -19,20 +19,18 @@ const Header = () => {
                         <li className="nav-item">
                             <NavLink className="nav-link active" aria-current="page" to={"/about"}>About</NavLink>
                         </li>
+                        
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Services</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Rules</a>
+                            <NavLink className="nav-link" to={"/rules"}>Rules</NavLink>
                         </li>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Categories
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a className="dropdown-item" href="#">School Design</a></li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li><a className="dropdown-item" href="#">Landscape Design</a></li>
+                                <li><NavLink className="dropdown-item" to={'categories/schooldesign'}>School Design </NavLink> </li>
+                                <li><hr className="dropdown-divider"  /></li>
+                                <li><NavLink className="dropdown-item" to={'categories/landscapedesign'} >Landscape Design</NavLink></li>
                             </ul>
                         </li>
                         <li className="nav-item dropdown">
@@ -46,7 +44,7 @@ const Header = () => {
                             </ul>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link " href="#" tabIndex="-1" aria-disabled="true">Contacts</a>
+                            <NavLink className="nav-link " to={"/contactus"} tabIndex="-1" aria-disabled="true">Contacts</NavLink>
                         </li>
                     </ul>
                 </div>
