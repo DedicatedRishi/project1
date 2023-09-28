@@ -41,7 +41,7 @@ const Header = () => {
                                 Register
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a className="dropdown-item" href="#">Login</a></li>
+                                <li><NavLink className="dropdown-item" to={'/login'}>Login</NavLink></li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li><NavLink className="dropdown-item" to={'/register'}>Register</NavLink></li>
                             </ul>
