@@ -3,13 +3,16 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   userId: {
     type: String,
-    required:false,
+    required: false,
     unique: true,
   },
   role: String,
   type: String,
   teamLeaderName: String,
-  members: [String],
+  member1: String,
+  member2: String,
+  member3: String,
+  member4: String,
   name: String,
   email: {
     type: String,
@@ -25,7 +28,7 @@ const userSchema = new mongoose.Schema({
   lastLogin: {
     type: Date,
   },
-  
+
 });
 
 const UserModel = mongoose.model('users', userSchema);

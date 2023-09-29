@@ -14,20 +14,20 @@ mongoose.connect("mongodb://localhost:27017/user");
 const generateUniqueUserId = async () => {
     // Find the highest existing user ID in the database
     const highestUserId = await UserModel.findOne({}, { userId: 1 }, { sort: { userId: -1 } });
-  
+
     let nextUserId;
-  
+
     if (highestUserId) {
-      // Increment the highest user ID by 1 and pad it with leading zeros
-      nextUserId = String(Number(highestUserId.userId) + 1).padStart(4, '0');
+        // Increment the highest user ID by 1 and pad it with leading zeros
+        nextUserId = String(Number(highestUserId.userId) + 1).padStart(4, '0');
     } else {
-      // If there are no existing users, start with "0001"
-      nextUserId = '0001';
+        // If there are no existing users, start with "0001"
+        nextUserId = '0001';
     }
     return nextUserId;
-  };
+};
 
-   
+
 
 // User Login
 app.post('/login', (req, res) => {
@@ -49,13 +49,13 @@ app.post('/login', (req, res) => {
 // Post Method
 app.post('/register', async (req, res) => {
     try {
-        const { role, type, team_leader_name, members, name, email, mobile_no, password } = req.body;
-        if (!name || !email || !password) {
+        const { role, type, teamLeaderName, member1, member2, member3, member4, name, email, mobileNo, password } = req.body;
+        if (!email || !password) {
             return res.status(400).json({ message: 'Name, Email, and Password are required fields.' });
         }
-         // Generate a unique four-digit user ID
+        // Generate a unique four-digit user ID
         const userId = await generateUniqueUserId();
-        const user = await UserModel.create({ userId, role, type, team_leader_name, members, name, email, mobile_no, password })
+        const user = await UserModel.create({ userId, role, type, teamLeaderName, member1, member2, member3, member4, name, email, mobileNo, password })
         res.status(201).json(user);
     } catch (error) {
         console.log(error);
@@ -63,5 +63,5 @@ app.post('/register', async (req, res) => {
     }
 })
 app.listen(3001, () => {
-    console.log("Server is Running")
+    console.log("Server is Running on port 3001")
 })       
