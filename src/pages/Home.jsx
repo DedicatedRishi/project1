@@ -233,28 +233,41 @@ const Wrapper = styled.section`
     color: #0077cc;
     font-style: italic;
     font-weight: bold;
+  ${'' /* }
+  @media (min-width: 862px){
+    
+    .home-title {
+    font-size: 70px !important; /* Set the title font size */
+   
+}
+  
+  .home-subtitle {
+    font-size: 40px; /* Set the subtitle font size */
   }
+
+  } */}
   @media (min-width: 862px){
     .homepage{
       height: 90vh;
     }
+     .card {
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    background: rgba(205, 217, 230, 0.9);
+    height: 50vh;
+    ${'' /* width: 80vw;  */}
+    max-width: 1000px; /* Set a maximum width for larger screens */
+  }
     .home-title {
-    font-size: 50px; /* Set the title font size */
-    color: #333; /* Set the title text color */
-    font-family: 'Arial', sans-serif; /* Use a common font family */
-    padding: 10px;
-    text-align: center; /* Move the title to the left */
-    font-family: 'Arial', sans-serif;
-    font-weight: bold;
+    font-size: 40px !important; /* Set the title font size */
+   
+   
 }
   
   .home-subtitle {
-    font-size: 20px; /* Set the subtitle font size */
-    color: #0077cc; /* Set the subtitle text color to a vibrant blue */
-    text-align: center; /* Move the subtitle to the left */
-    font-style: italic;
-  margin-top: 10px;
-  font-weight: bold;
+    ${'' /* font-size: 40px !important; */}
+    
   }
 
   }
