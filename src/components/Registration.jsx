@@ -1,23 +1,43 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { NavLink } from 'react-router-dom';
+
 
 
 const Registration = () => {
   const [role, setRole] = useState('');
+  
   const [registrationType, setRegistrationType] = useState('');
   const [email, setEmail] = useState('');
   const [showOtpButton, setShowOtpButton] = useState(false);
   const [otp, setOtp] = useState('');
   const [showSubmitButton, setShowSubmitButton] = useState(false);
-  const [recaptchaValue, setRecaptchaValue] = useState('');
   
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [captcha, setCaptcha] = useState(generateCaptcha());
+
+
 
   const handleRoleChange = (event) => {
-    setRole(event.target.value);
+    const selectedRole = event.target.value;
+    setRole(selectedRole);
+
+    // Reset registration type and other fields when role changes
+    setRegistrationType('');
+    setEmail('');
+    setShowOtpButton(false);
+    setOtp('');
+    setShowSubmitButton(false);
+    setRecaptchaValue('');
+    setPassword('');
+    setConfirmPassword('');
   };
 
   const handleRegistrationTypeChange = (event) => {
@@ -49,10 +69,7 @@ const Registration = () => {
     setShowSubmitButton(enteredOtp.length === 4);
   };
 
-  const handleRecaptchaChange = (value) => {
-    // Handle reCAPTCHA value change
-    setRecaptchaValue(value);
-  };
+ 
   
 
   const handlePasswordChange = (event) => {
@@ -82,6 +99,59 @@ const Registration = () => {
     );
   };
 
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleToggleConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+
+  const calculatePasswordStrength = (password) => {
+    // Define your password strength criteria here
+    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+    const averageRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+  
+    if (strongRegex.test(password)) {
+      return 'strong';
+    } else if (averageRegex.test(password)) {
+      return 'average';
+    } else {
+      return 'weak';
+    }
+  };
+  
+  const getPasswordStrengthColor = (strength) => {
+    switch (strength) {
+      case 'weak':
+        return 'red';
+      case 'average':
+        return 'orange';
+      case 'strong':
+        return 'green';
+      default:
+        return 'transparent';
+    }
+  };
+
+  function generateCaptcha() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+
+  const handleRefreshCaptcha = () => {
+    setCaptcha(generateCaptcha());
+  };
+
+  
+ 
+
   return (
     <Wrapper>
       <h1>Register</h1>
@@ -109,7 +179,7 @@ const Registration = () => {
       <form>
 
       <div className="mb-3">
-          <label className="form-label">Type:</label>
+          <label className="form-label"></label>
           <div className="d-flex justify-content-center">
             <div className="form-check form-check-inline">
               <input
@@ -236,24 +306,48 @@ const Registration = () => {
           <input type="text" className="form-control" id="mobile" placeholder="Mobile No" />
         </div>
        
+     
+
         <div className="mb-3">
-        <label htmlFor="password" className="form-label">
-          Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          id="password"
-          placeholder="Password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        {!isValidPassword(password) && (
-          <div className="error-text">
-           * Password must be at least 8 characters, contain at least one special character, one number, one capital and one lowercase letter.
-          </div>
-        )}
-      </div>
+  <label htmlFor="password" className="form-label">
+    Password
+  </label>
+  <div className="input-group">
+    <input
+      type={showPassword ? 'text' : 'password'}
+      className="form-control"
+      id="password"
+      placeholder="Password"
+      value={password}
+      onChange={handlePasswordChange}
+    />
+    <button
+      type="button"
+      className="btn btn-light"
+      onClick={handleTogglePassword}
+    >
+      {showPassword ? <FaEyeSlash /> : <FaEye />}
+    </button>
+  </div>
+  <div className="password-strength-bar">
+    <div
+      className="strength-indicator"
+      style={{
+        width: `${(password.length / 12) * 100}%`,
+        backgroundColor: getPasswordStrengthColor(
+          calculatePasswordStrength(password)
+        ),
+      }}
+    ></div>
+  </div>
+  {!isValidPassword(password) && (
+    <div className="error-text">
+      * Password must be at least 8 characters, contain at least one special
+      character, one number, one capital and one lowercase letter.
+    </div>
+  )}
+</div>
+
 
       <div className="mb-3">
         <label htmlFor="confirmPassword" className="form-label">
@@ -274,18 +368,365 @@ const Registration = () => {
 
 
          {/* Add reCAPTCHA */}
+         {/* Captcha Generator */}
+         <div className="container">
+        <header>Captcha Generator</header>
+        <div className="input_field captch_box">
+          <input type="text" value={captcha} disabled />
+          <button className="refresh_button" onClick={handleRefreshCaptcha}>
+            <i className="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+        <div className="input_field captch_input">
+          <input type="text" placeholder="Enter captcha" />
+        </div>
+        <div className="message">Entered captcha is correct</div>
+        <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
+  <button>Submit Captcha</button>
+</div>
+      </div>
+
+
+        <button type="submit" className="btn btn-primary">
+          Register
+        </button>
+        
+         {/* when need use navlink here at place of span login
+         <NavLink to="#" className="login-link">
+  <span className="login-text">Login</span>
+</NavLink>
+         */}
+         <div className="already-have-account">
+        Already have an account? <span className="login-text">Login</span>
+      </div>
+
+        
+      </form>
+            )}
+
+               {/*this is for admin*/}
+
+               {role === 'admin' && (
+        <form>
+          {/* ... (additional form fields for admin) */}
+
+          <div className="mb-3">
+        <label htmlFor="name" className="form-label">
+          Name
+        </label>
+        <input type="text" className="form-control" id="name" placeholder="Name" />
+      </div>
+
+         
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">
+            Email
+          </label>
+          <input
+              type="email"
+              className="form-control"
+              id="email"
+              placeholder="Email"
+              value={email}
+              onChange={handleEmailChange}
+            />        </div>
+        
+        {showOtpButton && (
+
+        <button type="button" className="btn btn-secondary">
+            Send OTP
+          </button>
+        )}
+       
+       
+
+          <div className="mb-3">
+            <label htmlFor="otp" className="form-label">
+              OTP
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="otp"
+              placeholder="Enter 4-digit OTP"
+              value={otp}
+              onChange={handleOtpChange}
+              maxLength={4}
+            />
+          </div>
+
+          {showSubmitButton && (
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          )}
+
+        <div className="mb-3">
+          <label htmlFor="mobile" className="form-label">
+            Mobile No
+          </label>
+          <input type="text" className="form-control" id="mobile" placeholder="Mobile No" />
+        </div>
+       
+     
+
+        <div className="mb-3">
+  <label htmlFor="password" className="form-label">
+    Password
+  </label>
+  <div className="input-group">
+    <input
+      type={showPassword ? 'text' : 'password'}
+      className="form-control"
+      id="password"
+      placeholder="Password"
+      value={password}
+      onChange={handlePasswordChange}
+    />
+    <button
+      type="button"
+      className="btn btn-light"
+      onClick={handleTogglePassword}
+    >
+      {showPassword ? <FaEyeSlash /> : <FaEye />}
+    </button>
+  </div>
+  <div className="password-strength-bar">
+    <div
+      className="strength-indicator"
+      style={{
+        width: `${(password.length / 12) * 100}%`,
+        backgroundColor: getPasswordStrengthColor(
+          calculatePasswordStrength(password)
+        ),
+      }}
+    ></div>
+  </div>
+  {!isValidPassword(password) && (
+    <div className="error-text">
+      * Password must be at least 8 characters, contain at least one special
+      character, one number, one capital and one lowercase letter.
+    </div>
+  )}
+</div>
+
+
       <div className="mb-3">
-        <ReCAPTCHA
-          sitekey="6LdRm1woAAAAAK_U2fg95ODO9VASg3Kw0voB1nB8" // Replace with your reCAPTCHA site key
-          onChange={handleRecaptchaChange}
+        <label htmlFor="confirmPassword" className="form-label">
+          Confirm Password
+        </label>
+        <input
+          type="password"
+          className="form-control"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
         />
+        {confirmPassword !== password && confirmPassword && (
+          <div className="error-text">*Passwords do not match.</div>
+        )}
+      </div>
+
+
+         {/* Add reCAPTCHA */}
+     
+       {/* Captcha Generator */}
+       <div className="container">
+        <header>Captcha Generator</header>
+        <div className="input_field captch_box">
+          <input type="text" value={captcha} disabled />
+          <button className="refresh_button" onClick={handleRefreshCaptcha}>
+            <i className="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+        <div className="input_field captch_input">
+          <input type="text" placeholder="Enter captcha" />
+        </div>
+        <div className="message">Entered captcha is correct</div>
+        <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
+  <button>Submit Captcha</button>
+</div>
       </div>
 
         <button type="submit" className="btn btn-primary">
           Register
         </button>
-      </form>
-            )}
+        
+         {/* when need use navlink here at place of span login
+         <NavLink to="#" className="login-link">
+  <span className="login-text">Login</span>
+</NavLink>
+         */}
+         <div className="already-have-account">
+        Already have an account? <span className="login-text">Login</span>
+      </div>
+
+
+        </form>
+      )}
+
+
+         {/* This is for judge page */}
+
+         {role === 'judge' && (
+        <form>
+          {/* ... (additional form fields for admin) */}
+
+          <div className="mb-3">
+        <label htmlFor="name" className="form-label">
+          Name
+        </label>
+        <input type="text" className="form-control" id="name" placeholder="Name" />
+      </div>
+
+         
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">
+            Email
+          </label>
+          <input
+              type="email"
+              className="form-control"
+              id="email"
+              placeholder="Email"
+              value={email}
+              onChange={handleEmailChange}
+            />        </div>
+        
+        {showOtpButton && (
+
+        <button type="button" className="btn btn-secondary">
+            Send OTP
+          </button>
+        )}
+       
+       
+
+          <div className="mb-3">
+            <label htmlFor="otp" className="form-label">
+              OTP
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="otp"
+              placeholder="Enter 4-digit OTP"
+              value={otp}
+              onChange={handleOtpChange}
+              maxLength={4}
+            />
+          </div>
+
+          {showSubmitButton && (
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          )}
+
+        <div className="mb-3">
+          <label htmlFor="mobile" className="form-label">
+            Mobile No
+          </label>
+          <input type="text" className="form-control" id="mobile" placeholder="Mobile No" />
+        </div>
+       
+     
+
+        <div className="mb-3">
+  <label htmlFor="password" className="form-label">
+    Password
+  </label>
+  <div className="input-group">
+    <input
+      type={showPassword ? 'text' : 'password'}
+      className="form-control"
+      id="password"
+      placeholder="Password"
+      value={password}
+      onChange={handlePasswordChange}
+    />
+    <button
+      type="button"
+      className="btn btn-light"
+      onClick={handleTogglePassword}
+    >
+      {showPassword ? <FaEyeSlash /> : <FaEye />}
+    </button>
+  </div>
+  <div className="password-strength-bar">
+    <div
+      className="strength-indicator"
+      style={{
+        width: `${(password.length / 12) * 100}%`,
+        backgroundColor: getPasswordStrengthColor(
+          calculatePasswordStrength(password)
+        ),
+      }}
+    ></div>
+  </div>
+  {!isValidPassword(password) && (
+    <div className="error-text">
+      * Password must be at least 8 characters, contain at least one special
+      character, one number, one capital and one lowercase letter.
+    </div>
+  )}
+</div>
+
+
+      <div className="mb-3">
+        <label htmlFor="confirmPassword" className="form-label">
+          Confirm Password
+        </label>
+        <input
+          type="password"
+          className="form-control"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
+        />
+        {confirmPassword !== password && confirmPassword && (
+          <div className="error-text">*Passwords do not match.</div>
+        )}
+      </div>
+
+
+         {/* Add reCAPTCHA */}
+       {/* Captcha Generator */}
+       <div className="container">
+        <header>Captcha Generator</header>
+        <div className="input_field captch_box">
+          <input type="text" value={captcha} disabled />
+          <button className="refresh_button" onClick={handleRefreshCaptcha}>
+            <i className="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+        <div className="input_field captch_input">
+          <input type="text" placeholder="Enter captcha" />
+        </div>
+        <div className="message">Entered captcha is correct</div>
+        <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
+  <button>Submit Captcha</button>
+</div>
+      </div>
+
+        <button type="submit" className="btn btn-primary">
+          Register
+        </button>
+        
+         {/* when need use navlink here at place of span login
+         <NavLink to="#" className="login-link">
+  <span className="login-text">Login</span>
+</NavLink>
+         */}
+         <div className="already-have-account">
+        Already have an account? <span className="login-text">Login</span>
+      </div>
+
+
+        </form>
+      )}
 
     </Wrapper>
   );
@@ -295,8 +736,7 @@ const Wrapper = styled.section`
     width: 50%;
   margin: auto;
   padding: 20px;
-  background-color: #2222;
-  background: url('/pratik/images/Reg-Background.jpg') no-repeat center center fixed;
+  background-color: #fff;
 
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -361,18 +801,176 @@ const Wrapper = styled.section`
   }
 
   
+  .container {
+  position: relative;
+  max-width: 300px;
+  width: 100%;
+  border-radius: 12px;
+  padding: 15px 25px 25px;
+  background: #fff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+}
 
-  .captcha-image {
-    width: 100%;
-    max-width: none;
-    border-radius: 0;
+header {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.input_field {
+  position: relative;
+  height: 45px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.refresh_button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: #826afb;
+  height: 30px;
+  width: 30px;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+}
+
+.refresh_button:active {
+  transform: translateY(-50%) scale(0.98);
+}
+
+.input_field input,
+.button button {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+}
+
+.input_field input {
+  padding: 0 15px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.captch_box input {
+  color: #6b6b6b;
+  font-size: 22px;
+  pointer-events: none;
+}
+
+.captch_input input:focus {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.message {
+  font-size: 14px;
+  margin: 14px 0;
+  color: #826afb;
+  display: none;
+}
+
+.message.active {
+  display: block;
+}
+
+.button button {
+  background: #826afb;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.button button:hover {
+  background: #6345d1; /* Adjust the hover background color as needed */
+}
+
+.button button:active {
+  transform: scale(0.99);
+}
+
+.button button.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.button button.enabled {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+
+
+  .input-group .btn .eye-icon {
+  fill: white;
+  width: 20px; /* Adjust width to make it smaller */
+  height: 20px; /* Adjust height to make it smaller */
+}
+
+.input-group .btn-light:hover .eye-icon {
+  fill: white;
+  width: 20px; /* Adjust width to make it smaller */
+  height: 20px; /* Adjust height to make it smaller */
+}
+
+.input-group .btn-light:focus .eye-icon {
+  fill: white;
+  width: 20px; /* Adjust width to make it smaller */
+  height: 20px; /* Adjust height to make it smaller */
+}
+
+/* Updated CSS for a smaller password strength bar */
+
+.password-strength-bar {
+  width: 100%;
+  height: 4px; /* Adjust the height for a smaller bar */
+  background-color: #f0f0f0; /* Base color of the strength bar */
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.strength-indicator {
+  height: 100%;
+  border-radius: 5px;
+}
+
+/* Adjust the colors for weak, average, and strong */
+.strength-indicator {
+  background-color: transparent; /* Default color */
+}
+
+.strength-indicator.average {
+  background-color: orange; /* Color for average strength */
+}
+
+.strength-indicator.strong {
+  background-color: green; /* Color for strong strength */
+}
+
+
+.already-have-account {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.1em;
   }
 
+  .login-link {
+  text-decoration: none;
+}
 
-
-
- 
+.login-text {
+  color: blue; /* or any other color you prefer */
+  /* Add any other styles you want for the login text */
+}
 
 `;
 
-export default Registration;
+export default Registration; 
