@@ -204,7 +204,7 @@ const Wrapper = styled.section`
     background-size: cover;
     position: relative;
     width: 100%;
-    min-height: 100vh; /* Use min-height for a full-screen effect */
+    min-height: 90vh; /* Use min-height for a full-screen effect */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -260,7 +260,7 @@ const Wrapper = styled.section`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
   }
 
   .card {
@@ -268,6 +268,7 @@ const Wrapper = styled.section`
   margin-bottom: 100%;
     text-align: center;
     padding: 50px;
+
     border-radius: 30px;
     background: rgba(205, 217, 230, 0.9);
     width: 80%; /* Adjust the width of the card for smaller screens */
