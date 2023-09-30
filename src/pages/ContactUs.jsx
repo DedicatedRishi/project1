@@ -45,7 +45,7 @@ const Contact = () => {
 
 const Wrapper = styled.section`
   margin-top: 100px;
-  margin-bottom:100px;
+  margin-bottom:150px;
 
 .p-2{
   width : 30%;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useState, useEffect}from 'react';
 import styled from 'styled-components';
 import img3 from '../public/images/pratik/img3.jpg';
 import img1 from '../public/images/pratik/img1.jpg';
@@ -7,6 +7,36 @@ import bg from '../public/images/pratik/background.jpg';
 import banner from '../public/images/pratik/banner3.jpg';
 
 function Home() {
+  const targetDate = new Date("2023-12-31T23:59:00").getTime();
+
+    // Calculate the remaining time and update it every second
+    const calculateTimeRemaining = () => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+  
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  
+      return {
+        days,
+        hours,
+        minutes,
+        seconds
+      };
+    };
+  
+    const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining);
+  
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setTimeRemaining(calculateTimeRemaining());
+      }, 1000);
+  
+      return () => clearInterval(timer);
+    }, []); // Run this effect only once
+
   return (
     <Wrapper>
       <div className="homepage">
@@ -85,6 +115,73 @@ function Home() {
         </div>
       </YoutubeVideo>
 
+
+      <Details>
+  <div class="container mt-5">
+    <div class="text-center">
+      <h1>Welcome to the Architecture Design Competition</h1>
+      <p>Submit your designs for a chance to win exciting prizes!</p>
+    </div>
+
+    <div class="mt-4">
+      <h2>Eligibility:</h2>
+      <ul>
+        <li>All students must be currently enrolled in architecture colleges.</li>
+        <li>Participation can be individual or in a team.</li>
+        <li>Maximum team size: 4 members.</li>
+      </ul>
+    </div>
+
+    <div class="mt-4">
+      <h2>Judgement:</h2>
+      <ul>
+        <li>Designs will be judged by a panel of experienced architects appointed by XYZ organisation.</li>
+        <li>Three top designs in both categories will be awarded.</li>
+      </ul>
+    </div>
+
+    <div class="mt-4">
+      <h2>Prizes:</h2>
+      <p>Selected designs in each category will receive a cash prize of 50,000/-.</p>
+    </div>
+
+    <div class="mt-4">
+      
+      <p class="small"><strong>Note :</strong> Designs, once submitted and selected, will become the property of XYZ Organisation. The
+        organisation holds the right to use them for expansion, promotion, and construction.</p>
+    </div>
+
+    <div class="mt-4">
+      <h2>Deadline:</h2>
+      <p>Last Date for Submission:  31st December 
+        2023</p>
+    </div>
+
+    <div class="mt-4">
+  <h2>Countdown Timer:</h2>
+  <div id="countdown">
+  <div className="countdown-item">
+          <span className="countdown-value">{timeRemaining.days}</span>
+          <span className="countdown-label">Days</span>
+        </div>
+        <div className="countdown-item">
+          <span className="countdown-value">{timeRemaining.hours}</span>
+          <span className="countdown-label">Hours</span>
+        </div>
+        <div className="countdown-item">
+          <span className="countdown-value">{timeRemaining.minutes}</span>
+          <span className="countdown-label">Minutes</span>
+        </div>
+        <div className="countdown-item">
+          <span className="countdown-value">{timeRemaining.seconds}</span>
+          <span className="countdown-label">Seconds</span>
+        </div>
+  </div>
+</div>
+
+
+  </div>
+  </Details>
       <Banner>
         {/* <img src={banner} alt="Banner" height='500px' className="banner-img" /> */}
         <div className="overlay">
@@ -137,6 +234,54 @@ const Wrapper = styled.section`
     font-style: italic;
     font-weight: bold;
   }
+  @media (min-width: 862px){
+    .home-title {
+    font-size: 50px; /* Set the title font size */
+    color: #333; /* Set the title text color */
+    font-family: 'Arial', sans-serif; /* Use a common font family */
+    padding: 10px;
+    text-align: center; /* Move the title to the left */
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+  
+  .home-subtitle {
+    font-size: 20px; /* Set the subtitle font size */
+    color: #0077cc; /* Set the subtitle text color to a vibrant blue */
+    text-align: center; /* Move the subtitle to the left */
+    font-style: italic;
+  margin-top: 10px;
+  font-weight: bold;
+  }
+
+  }
+  @media (max-width: 576px) {
+  .homepage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .card {
+    left: -0%;
+  margin-bottom: 100%;
+    text-align: center;
+    padding: 50px;
+    border-radius: 30px;
+    background: rgba(205, 217, 230, 0.9);
+    width: 80%; /* Adjust the width of the card for smaller screens */
+  }
+
+  .home-title {
+    font-size: 30px; /* Adjust the title font size for smaller screens */
+  }
+
+  .home-subtitle {
+    font-size: 16px; /* Adjust the subtitle font size for smaller screens */
+  }
+}
+
 
   @media (max-width: 768px) {
     .homepage {
@@ -246,7 +391,7 @@ const YoutubeVideo = styled.div`
     ${'' /* max-width: 800px;  */}
     iframe {
       width: 100%;
-      height: 250px;
+      height: 400px;
     }
   }
 
@@ -288,6 +433,74 @@ const YoutubeVideo = styled.div`
     }
   }
 
+`;
+
+
+const Details = styled.div`
+  .container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color:  rgb(0, 56, 168, 0.8);
+  border-radius: 10px;
+  border: 3px solid #333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.text-center {
+  text-align: center;
+}
+
+h1 {
+  font-size: 2em;
+  color: #fff;
+}
+
+p {
+  font-size: 1.2em;
+  color: #fff;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+li {
+  font-size: 1.1em;
+  color: #fff;
+}
+
+h2 {
+  font-size: 1.5em;
+  color: #fff;
+  margin-top: 15px;
+}
+
+.small {
+  font-size: 0.9em;
+  color: #fff;
+}
+
+/* Adjusting margins and paddings */
+.mt-4 {
+  margin-top: 20px;
+}
+
+.countdown-item {
+    color: red; /* Set the countdown item color to red */
+    font-size: 24px; /* Adjust the font size of the countdown value */
+    font-weight: bold; /* Make the countdown value bold */
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 20px;
+    border-radius: 50%; /* Create a circular appearance */
+    background-color: rgba(0, 0, 0, 0.1); /* Add a background for contrast */
+  }
+
+  .countdown-label {
+    font-size: 16px; /* Adjust the font size of the countdown label */
+    display: block; /* Ensure labels appear on a new line */
+  }
 `;
 
 const Banner = styled.div`
