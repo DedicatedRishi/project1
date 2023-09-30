@@ -235,6 +235,9 @@ const Wrapper = styled.section`
     font-weight: bold;
   }
   @media (min-width: 862px){
+    .homepage{
+      height: 90vh;
+    }
     .home-title {
     font-size: 50px; /* Set the title font size */
     color: #333; /* Set the title text color */
@@ -260,7 +263,7 @@ const Wrapper = styled.section`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90vh;
+    height: 100vh;
   }
 
   .card {
@@ -268,7 +271,6 @@ const Wrapper = styled.section`
   margin-bottom: 100%;
     text-align: center;
     padding: 50px;
-
     border-radius: 30px;
     background: rgba(205, 217, 230, 0.9);
     width: 80%; /* Adjust the width of the card for smaller screens */
@@ -285,8 +287,11 @@ const Wrapper = styled.section`
 
 
   @media (max-width: 768px) {
-    .homepage {
+    ${'' /* .homepage {
       min-height: auto; /* Remove full-screen effect on smaller screens */
+    } */}
+    .homepage{
+      height: 90vh;
     }
 
     .card {
