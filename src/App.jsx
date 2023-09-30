@@ -6,10 +6,9 @@ import Header from './components/Header';
 import { Routes, Route } from 'react-router-dom';
 import SchoolDesign from './components/SchoolDesign';
 import LandscapeDesign from './components/LandscapeDesign';
-import Regist from './components/Regist';
 import Login from './components/Login';
 import Registration from './components/Registration';
-import './components/Registration.css';
+
 
 const App = () => {
   return (
