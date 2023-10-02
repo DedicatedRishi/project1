@@ -56,12 +56,26 @@ const Registration = () => {
     setShowOtpButton(isValidEmail);
   };  
 
+  
   const handleSendOtp = () => {
-    // Simulate sending a 4-digit OTP
-    const generatedOtp = Math.floor(1000 + Math.random() * 9000);
-    setOtp(generatedOtp.toString());
-    setShowSubmitButton(true);
+    // Backend developer: Send a request to the backend to generate and send OTP to the provided email.
+    // You will need to call a backend API that generates and sends OTP to the email.
+    // Example API request:
+    // POST /api/send-otp
+    // Request Body: { "email": email }
+    // Backend will generate the OTP, send it to the provided email, and respond with success or failure.
   };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    // Backend developer: Send the entered OTP for verification to the backend.
+    // You will need to call a backend API that verifies the entered OTP.
+    // Example API request:
+    // POST /api/verify-otp
+    // Request Body: { "email": email, "otp": otp }
+    // Backend will verify the OTP and respond with success or failure.
+  };
+
 
   const handleOtpChange = (event) => {
     const enteredOtp = event.target.value;
@@ -69,9 +83,7 @@ const Registration = () => {
     setShowSubmitButton(enteredOtp.length === 4);
   };
 
- 
   
-
   const handlePasswordChange = (event) => {
     const enteredPassword = event.target.value;
     // Validate the password against the requirements
@@ -176,7 +188,7 @@ const Registration = () => {
 
       {role === 'student' && (
 
-      <form>
+      <form onSubmit={handleFormSubmit} >
 
       <div className="mb-3">
           <label className="form-label"></label>
@@ -269,12 +281,12 @@ const Registration = () => {
               onChange={handleEmailChange}
             />        </div>
         
-        {showOtpButton && (
-
-        <button type="button" className="btn btn-secondary">
-            Send OTP
-          </button>
-        )}
+       
+      {showOtpButton && (
+        <button type="button" className="btn btn-secondary" onClick={handleSendOtp}>
+          Send OTP
+        </button>
+      )}
        
        
 
@@ -401,13 +413,13 @@ const Registration = () => {
       </div>
 
         
-      </form>
+      </form  >
             )}
 
                {/*this is for admin*/}
 
                {role === 'admin' && (
-        <form>
+        <form  onSubmit={handleFormSubmit}>
           {/* ... (additional form fields for admin) */}
 
           <div className="mb-3">
@@ -570,7 +582,7 @@ const Registration = () => {
          {/* This is for judge page */}
 
          {role === 'judge' && (
-        <form>
+        <form  onSubmit={handleFormSubmit}>
           {/* ... (additional form fields for admin) */}
 
           <div className="mb-3">
