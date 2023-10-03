@@ -21,7 +21,10 @@ const userSchema = new mongoose.Schema({
   },
   mobileNo: String,
   password: String,
-  registrationDate: {
+  pdfFilePath: {
+    type: String,
+  },
+ registrationDate: {
     type: Date,
     default: Date.now,
   },

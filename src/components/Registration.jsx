@@ -4,41 +4,28 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 
 const Registration = () => {
-  const [formData, setFormData] = useState({
-    userId: '', // Initialize with an empty string, or you can generate it dynamically
-    role: '',
-    type: '',
-    teamLeaderName: '',
-    member1: '',
-    member2: '',
-    member3: '',
-    member4: '',
-    name: '',
-    email: '',
-    password: '',
-    mobileNo: '',
-  })
 
-  // const [role, setRole] = useState('');
-  // const [registrationType, setRegistrationType] = useState('');
-  //const [email, setEmail] = useState('');
-  const [showOtpButton, setShowOtpButton] = useState(false);
+  const [userId, setUserId] = useState('')
+  const [role, setRole] = useState('')
+  const [type, setType] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('');
-  const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const [member1, setMember1] = useState('')
+  const [member2, setMember2] = useState('')
+  const [member3, setMember3] = useState('')
+  const [member4, setMember4] = useState('')
+  const [password, setPassword] = useState('')
+  const [mobileNo, setMobileNo] = useState('')
+  const [showOtpButton, setShowOtpButton] = useState(false);
+  const [teamLeaderName, setTeamLeaderName] = useState('')
   const [recaptchaValue, setRecaptchaValue] = useState('');
-
-  //const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showSubmitButton, setShowSubmitButton] = useState(false);
 
 
-  // const handleRoleChange = (event) => {
-  //   setRole(event.target.value);
-  // };
 
-  // const handleRegistrationTypeChange = (event) => {
-  //   setRegistrationType(event.target.value);
 
-  // };
 
   const handleEmailChange = (event) => {
     const enteredEmail = event.target.value;
@@ -98,17 +85,46 @@ const Registration = () => {
   };
 
   // Backend code
-  const { role, type, teamLeaderName, member1, member2, member3, member4, name, email, password, mobileNo } = formData;
 
   const clearRef = useRef(null)
 
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // Email Verification with Otp
+
+  const baseUrl = "http://localhost:3001";
+
+  const sendEmail = async (e) => {
+    e.preventDefault()
+    let dataSend = {
+      email: email,
+    };
+
+    const res = await fetch(`${baseUrl}/email/sendEmail`, {
+      method: "POST",
+      body: JSON.stringify(dataSend),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      // HANDLING ERRORS
+      .then((res) => {
+        console.log(res);
+        if (res.status > 199 && res.status < 300) {
+          alert("Send Successfully !");
+        }
+      });
   };
+
+
+
+
+
+  // Submit Form
   const handlesubmit = (e) => {
 
     e.preventDefault()
-    const newUser = {
+
+    axios.post('http://localhost:3001/register', {
       userId: '', // Generate this based on the latest user ID
       role,
       type,
@@ -123,9 +139,7 @@ const Registration = () => {
       mobileNo,
       registrationDate: new Date(),
       lastLogin: '',
-
-    };
-    axios.post('http://localhost:3001/register', newUser)
+    })
       .then(result => {
         console.log(result)
         clearRef.current.value = ''
@@ -147,7 +161,7 @@ const Registration = () => {
           id="role"
           name='role'
           value={role}
-          onChange={onChange}
+          onChange={(e) => setRole(e.target.value)}
         >
           <option >Select Role</option>
           <option value="student">Student</option>
@@ -169,7 +183,7 @@ const Registration = () => {
                 name="type"
                 value="individual"
                 checked={type === 'individual'}
-                onChange={onChange}
+                onChange={(e) => setType(e.target.value)}
               />
               <label className="form-check-label" htmlFor="individual">
                 Individual
@@ -183,7 +197,7 @@ const Registration = () => {
                 name="type"
                 value="team"
                 checked={type === 'team'}
-                onChange={onChange}
+                onChange={(e) => setType(e.target.value)}
               />
               <label className="form-check-label" htmlFor="team">
                 Team
@@ -192,38 +206,38 @@ const Registration = () => {
           </div>
         </div>
 
-        {/* ... (other form fields) */}
+
         {type === 'team' && (
           <>
             <div className="mb-3">
               <label htmlFor="teamLeaderName" className="form-label">
                 Team Leader Name
               </label>
-              <input type="text" className="form-control" id="teamLeaderName" ref={clearRef} placeholder="Team Leader Name" name='teamLeaderName' value={teamLeaderName} onChange={onChange} />
+              <input type="text" className="form-control" id="teamLeaderName" ref={clearRef} placeholder="Team Leader Name" name='teamLeaderName' value={teamLeaderName} onChange={(e) => setTeamLeaderName(e.target.value)} />
             </div>
             <div className="mb-3">
               <label htmlFor="teamMember1" className="form-label">
                 Team Member 1
               </label>
-              <input type="text" className="form-control" id="teamMember1" ref={clearRef} placeholder="Team Member 1" name='member1' value={member1} onChange={onChange} />
+              <input type="text" className="form-control" id="teamMember1" ref={clearRef} placeholder="Team Member 1" name='member1' value={member1} onChange={(e) => setMember1(e.target.value)} />
             </div>
             <div className="mb-3">
               <label htmlFor="teamMember2" className="form-label">
                 Team Member 2
               </label>
-              <input type="text" className="form-control" id="teamMember2" ref={clearRef} placeholder="Team Member 2" name='member2' value={member2} onChange={onChange} />
+              <input type="text" className="form-control" id="teamMember2" ref={clearRef} placeholder="Team Member 2" name='member2' value={member2} onChange={(e) => setMember2(e.target.value)} />
             </div>
             <div className="mb-3">
               <label htmlFor="teamMember3" className="form-label">
                 Team Member 3
               </label>
-              <input type="text" className="form-control" id="teamMember3" ref={clearRef} placeholder="Team Member 3" name='member3' value={member3} onChange={onChange} />
+              <input type="text" className="form-control" id="teamMember3" ref={clearRef} placeholder="Team Member 3" name='member3' value={member3} onChange={(e) => setMember3(e.target.value)} />
             </div>
             <div className="mb-3">
               <label htmlFor="teamMember4" className="form-label">
                 Team Member 4
               </label>
-              <input type="text" className="form-control" id="teamMember4" ref={clearRef} placeholder="Team Member 4" name='member4' value={member4} onChange={onChange} />
+              <input type="text" className="form-control" id="teamMember4" ref={clearRef} placeholder="Team Member 4" name='member4' value={member4} onChange={(e) => setMember4(e.target.value)} />
             </div>
           </>
         )}
@@ -233,19 +247,19 @@ const Registration = () => {
             <label htmlFor="name" className="form-label">
               Name
             </label>
-            <input type="text" className="form-control" id="name" ref={clearRef} placeholder="Name" name='name' value={name} onChange={onChange} />
+            <input type="text" className="form-control" id="name" ref={clearRef} placeholder="Name" name='name' value={name} onChange={(e) => setName(e.target.value)} />
           </div>
         )}
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email
           </label>
-          <input type="email" className="form-control" id="email" ref={clearRef} placeholder="Email" name='email' value={email} onChange={onChange} required />
+          <input type="email" className="form-control" id="email" ref={clearRef} placeholder="Email" name='email' value={email} onChange={handleEmailChange} required />
         </div>
 
         {showOtpButton && (
 
-          <button type="button" className="btn btn-secondary">
+          <button className="btn btn-secondary" onClick={(e) => sendEmail(e)}>
             Send OTP
           </button>
         )}
@@ -275,7 +289,7 @@ const Registration = () => {
           <label htmlFor="mobile" className="form-label">
             Mobile No
           </label>
-          <input type="number" className="form-control" id="mobile" ref={clearRef} placeholder="Mobile No" name='mobileNo' value={mobileNo} onChange={onChange} required/>
+          <input type="number" className="form-control" id="mobile" ref={clearRef} placeholder="Mobile No" name='mobileNo' value={mobileNo} onChange={(e) => setMobileNo(e.target.value)} required />
         </div>
 
         <div className="mb-3">
@@ -290,7 +304,7 @@ const Registration = () => {
             ref={clearRef}
             name='password'
             value={password}
-            onChange={onChange}
+            onChange={handlePasswordChange}
             required
           />
           {!isValidPassword(password) && (

@@ -1,14 +1,21 @@
 const express = require("express")
+const dotenv = require("dotenv");
+const emailRoutes = require("./routes/emailRoutes");
 const mongoose = require("mongoose")
 const UserModel = require('./models/User')
 const cors = require("cors")
 const app = express()
+dotenv.config();
 app.use(express.json())
 app.use(cors())
+
+
 
 // MongoDB Connection 
 mongoose.connect("mongodb://localhost:27017/user");
 
+//Signup and login
+app.use("/email", emailRoutes);
 
 // Function to generate a four-digit unique user ID
 const generateUniqueUserId = async () => {
@@ -62,6 +69,10 @@ app.post('/register', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 })
-app.listen(3001, () => {
+
+
+// Server Listen 
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
     console.log("Server is Running on port 3001")
 })       
