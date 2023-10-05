@@ -16,10 +16,12 @@ let transporter = nodemailer.createTransport({
 
 const sendEmail = expressAsyncHandler(async (req, res) => {
   const { email } = req.body;
+  
   console.log(email);
 
   const otp = generateOTP();
-
+  
+  
   var mailOptions = {
     from: process.env.SMTP_MAIL,
     to: email,
@@ -33,7 +35,9 @@ const sendEmail = expressAsyncHandler(async (req, res) => {
       console.log(error);
     } else {
       console.log("Email sent successfully!");
-    }
+      res.json({otp})
+     
+    }     
   });
 });
 

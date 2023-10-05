@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useEffect } from 'react';
 import styled from 'styled-components';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 
-const Registration = () => {
+
+
+const Registration = (props) => {
 
   const [userId, setUserId] = useState('')
   const [role, setRole] = useState('')
@@ -22,10 +24,9 @@ const Registration = () => {
   const [recaptchaValue, setRecaptchaValue] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const[data,setData]=useState()
 
-
-
-
+   
 
   const handleEmailChange = (event) => {
     const enteredEmail = event.target.value;
@@ -37,14 +38,20 @@ const Registration = () => {
     // Update the state to show/hide the OTP button based on email validation
     setShowOtpButton(isValidEmail);
   };
-
-  const handleSendOtp = () => {
+     
+    const handleSendOtp = () => {
     // Simulate sending a 4-digit OTP
-    const generatedOtp = Math.floor(1000 + Math.random() * 9000);
-    setOtp(generatedOtp.toString());
-    setShowSubmitButton(true);
-  };
-
+       let mailOtp =1415
+        // if(mailOtp == otp){
+        //   alert("Email Verified Successfuly")
+        // }
+        // else{
+        //   alert("Invaild OTP")
+        // } 
+        console.log('test')
+        
+      };
+  
   const handleOtpChange = (event) => {
     const enteredOtp = event.target.value;
     setOtp(enteredOtp);
@@ -92,13 +99,14 @@ const Registration = () => {
 
   const baseUrl = "http://localhost:3001";
 
-  const sendEmail = async (e) => {
+  const sendEmail =  async(e) => {
     e.preventDefault()
+    
     let dataSend = {
       email: email,
     };
-
-    const res = await fetch(`${baseUrl}/email/sendEmail`, {
+    
+    const res =await fetch(`${baseUrl}/email/sendEmail`, {
       method: "POST",
       body: JSON.stringify(dataSend),
       headers: {
@@ -106,20 +114,27 @@ const Registration = () => {
         "Content-Type": "application/json",
       },
     })
-      // HANDLING ERRORS
-      .then((res) => {
-        console.log(res);
-        if (res.status > 199 && res.status < 300) {
-          alert("Send Successfully !");
+    
+    // HANDLING ERRORS
+    .then((res) => {
+      console.log(res);
+      
+      if (res.status > 199 && res.status < 300) {
+        alert("OTP Send Successfully !");
+      }
+      if(res.ok){
+         let data= res.json()
+         console.log(`otp is:${data.otp}`)
         }
+      else{ 
+        alert("Process Failed")
+      }
       });
-  };
+    };
+    
 
-
-
-
-
-  // Submit Form
+   
+// Submit Form
   const handlesubmit = (e) => {
 
     e.preventDefault()
@@ -151,7 +166,7 @@ const Registration = () => {
   return (
     <Wrapper>
       <h1>Register</h1>
-
+      
       <div className="mb-3">
         <label htmlFor="role" className="form-label">
           Role:
@@ -280,7 +295,7 @@ const Registration = () => {
         </div>
 
         {showSubmitButton && (
-          <button type="submit" className="btn btn-primary">
+          <button className="btn btn-primary" onClick={handleSendOtp}>
             Submit
           </button>
         )}
