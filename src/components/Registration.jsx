@@ -13,7 +13,10 @@ const Registration = () => {
   const [showOtpButton, setShowOtpButton] = useState(false);
   const [otp, setOtp] = useState('');
   const [showSubmitButton, setShowSubmitButton] = useState(false);
-  
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [isInvalidOtp, setIsInvalidOtp] = useState(false);
+
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -22,6 +25,8 @@ const Registration = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [captcha, setCaptcha] = useState(generateCaptcha());
+  const [isCaptchaEntered, setIsCaptchaEntered] = useState(false);
+  const [isCaptchaSubmitted, setIsCaptchaSubmitted] = useState(false);
 
 
 
@@ -54,6 +59,7 @@ const Registration = () => {
 
     // Update the state to show/hide the OTP button based on email validation
     setShowOtpButton(isValidEmail);
+    
   };  
 
   
@@ -83,7 +89,26 @@ const Registration = () => {
     setShowSubmitButton(enteredOtp.length === 4);
   };
 
-  
+  const uOtp = 1010 ;
+  const handleOtpVerification = () => {
+    // Assuming you have a backend API to verify the OTP
+    // You would make an API call here to verify the OTP entered by the user
+    // For simplicity, we'll consider it verified if the entered OTP is '1234'
+    if (otp == uOtp) {
+      setIsOtpVerified(true);
+      setIsInvalidOtp(false);
+    } else {
+      setIsOtpVerified(false);
+      setIsInvalidOtp(true);
+    }
+  };
+
+  const closePopup = () => {
+    setIsOtpVerified(false);
+    setIsInvalidOtp(false);
+  };
+
+
   const handlePasswordChange = (event) => {
     const enteredPassword = event.target.value;
     // Validate the password against the requirements
@@ -148,6 +173,20 @@ const Registration = () => {
     }
   };
 
+  const getPasswordStrengthText = (strength) => {
+    switch (strength) {
+      case 'weak':
+        return 'Weak';
+      case 'average':
+        return 'Average';
+      case 'strong':
+        return 'Strong';
+      default:
+        return '';
+    }
+  };
+  
+
   function generateCaptcha() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -161,6 +200,16 @@ const Registration = () => {
     setCaptcha(generateCaptcha());
   };
 
+  const handleCaptchaChange = (event) => {
+    const enteredCaptcha = event.target.value;
+    // Assuming the captcha length is 6 characters, you can modify this accordingly
+    setIsCaptchaEntered(enteredCaptcha.length === 6);
+  };
+  
+  const handleSubmitCaptcha = () => {
+    // Assuming the captcha is considered submitted when it's non-empty, you can modify this accordingly
+    setIsCaptchaSubmitted(true);
+  };
   
  
 
@@ -283,33 +332,59 @@ const Registration = () => {
         
        
       {showOtpButton && (
+                <div className="mb-3 d-flex align-items-center">
+
         <button type="button" className="btn btn-secondary" onClick={handleSendOtp}>
           Send OTP
         </button>
-      )}
+      
        
        
-
-          <div className="mb-3">
+        
             <label htmlFor="otp" className="form-label">
-              OTP
+              
             </label>
             <input
-              type="text"
-              className="form-control"
+              type="number"
+              className="form-control input-otp"
               id="otp"
               placeholder="Enter 4-digit OTP"
               value={otp}
               onChange={handleOtpChange}
               maxLength={4}
             />
-          </div>
-
-          {showSubmitButton && (
-            <button type="submit" className="btn btn-primary">
+        
+          <button type="submit" className="btn btn-primary btn-submit-otp"  onClick={handleOtpVerification}  disabled={!otp || otp.length !== 4} >
               Submit
             </button>
-          )}
+           
+      
+          </div>
+      )}
+          {isOtpVerified && (
+        <div className="popup success">
+          <div className="popup-content">
+            <span className="close" onClick={closePopup}>
+              &times;
+            </span>
+              Verification Done 
+          </div>
+        </div>
+      )}
+
+      {isInvalidOtp && (
+        <div className="popup error">
+          <div className="popup-content">
+            <span className="close" onClick={closePopup}>
+              &times;
+            </span>
+            Invalid Credentials
+          </div>
+        </div>
+      )}
+
+
+
 
         <div className="mb-3">
           <label htmlFor="mobile" className="form-label">
@@ -352,6 +427,11 @@ const Registration = () => {
       }}
     ></div>
   </div>
+
+  <div className={`password-strength-text ${calculatePasswordStrength(password)}`}>
+  {password.length === 0 ? 'Password Strength' : getPasswordStrengthText(calculatePasswordStrength(password))}
+</div>
+  
   {!isValidPassword(password) && (
     <div className="error-text">
       * Password must be at least 8 characters, contain at least one special
@@ -390,18 +470,25 @@ const Registration = () => {
           </button>
         </div>
         <div className="input_field captch_input">
-          <input type="text" placeholder="Enter captcha" />
+          <input type="text" placeholder="Enter captcha" onChange={handleCaptchaChange} />
         </div>
         <div className="message">Entered captcha is correct</div>
         <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
-  <button>Submit Captcha</button>
+  <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
 </div>
       </div>
 
 
-        <button type="submit" className="btn btn-primary">
-          Register
-        </button>
+      { isCaptchaEntered && isCaptchaSubmitted && showSubmitButton ? (
+  <button type="submit" className="btn btn-primary">
+    Register
+  </button>
+) : (
+  <button type="button" className="btn btn-primary" disabled>
+    Register
+  </button>
+)}
+
         
          {/* when need use navlink here at place of span login
          <NavLink to="#" className="login-link">
@@ -451,11 +538,13 @@ const Registration = () => {
         )}
        
        
-
-          <div className="mb-3">
-            <label htmlFor="otp" className="form-label">
-              OTP
-            </label>
+       {showOtpButton &&( 
+        <>
+         
+            {/* <label htmlFor="otp" className="form-label">
+             OTP
+            </label> */}
+             <div className="mb-3">
             <input
               type="text"
               className="form-control"
@@ -467,12 +556,37 @@ const Registration = () => {
             />
           </div>
 
+
+          {isOtpVerified && (
+        <div className="popup success">
+          <div className="popup-content">
+            <span className="close" onClick={closePopup}>
+              &times;
+            </span>
+            OTP Verified <FaCheckCircle />
+          </div>
+        </div>
+      )}
+
+      {isInvalidOtp && (
+        <div className="popup error">
+          <div className="popup-content">
+            <span className="close" onClick={closePopup}>
+              &times;
+            </span>
+            Invalid Credentials
+          </div>
+        </div>
+      )}
+
           {showSubmitButton && (
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary"         onClick={handleOtpVerification}
+            >
               Submit
             </button>
           )}
-
+        </>
+       )}
         <div className="mb-3">
           <label htmlFor="mobile" className="form-label">
             Mobile No
@@ -553,17 +667,24 @@ const Registration = () => {
           </button>
         </div>
         <div className="input_field captch_input">
-          <input type="text" placeholder="Enter captcha" />
+          <input type="text" placeholder="Enter captcha"  onChange={handleCaptchaChange} />
         </div>
         <div className="message">Entered captcha is correct</div>
         <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
-  <button>Submit Captcha</button>
+  <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
 </div>
       </div>
 
-        <button type="submit" className="btn btn-primary">
-          Register
-        </button>
+      { isCaptchaEntered && isCaptchaSubmitted && showSubmitButton ? (
+  <button type="submit" className="btn btn-primary">
+    Register
+  </button>
+) : (
+  <button type="button" className="btn btn-primary" disabled>
+    Register
+  </button>
+)}
+
         
          {/* when need use navlink here at place of span login
          <NavLink to="#" className="login-link">
@@ -614,7 +735,8 @@ const Registration = () => {
         )}
        
        
-
+       {showOtpButton &&( 
+        <>
           <div className="mb-3">
             <label htmlFor="otp" className="form-label">
               OTP
@@ -630,12 +752,37 @@ const Registration = () => {
             />
           </div>
 
+
+          {isOtpVerified && (
+        <div className="popup success">
+          <div className="popup-content">
+            <span className="close" onClick={closePopup}>
+              &times;
+            </span>
+            OTP Verified <FaCheckCircle />
+          </div>
+        </div>
+      )}
+
+      {isInvalidOtp && (
+        <div className="popup error">
+          <div className="popup-content">
+            <span className="close" onClick={closePopup}>
+              &times;
+            </span>
+            Invalid Credentials
+          </div>
+        </div>
+      )}
+
           {showSubmitButton && (
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary"         onClick={handleOtpVerification}
+            >
               Submit
             </button>
           )}
-
+         </>
+       )}
         <div className="mb-3">
           <label htmlFor="mobile" className="form-label">
             Mobile No
@@ -715,17 +862,24 @@ const Registration = () => {
           </button>
         </div>
         <div className="input_field captch_input">
-          <input type="text" placeholder="Enter captcha" />
+          <input type="text" placeholder="Enter captcha"  onChange={handleCaptchaChange}  />
         </div>
         <div className="message">Entered captcha is correct</div>
         <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
-  <button>Submit Captcha</button>
+  <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
 </div>
       </div>
 
-        <button type="submit" className="btn btn-primary">
-          Register
-        </button>
+      { isCaptchaEntered && isCaptchaSubmitted &&  showSubmitButton ? (
+  <button type="submit" className="btn btn-primary">
+    Register
+  </button>
+) : (
+  <button type="button" className="btn btn-primary" disabled>
+    Register
+  </button>
+)}
+
         
          {/* when need use navlink here at place of span login
          <NavLink to="#" className="login-link">
@@ -791,7 +945,7 @@ const Wrapper = styled.section`
 
 
   .error-text {
-    color: red;
+    color: green;
     font-size: 0.9em;
     margin-top: 5px;
   }
@@ -799,6 +953,78 @@ const Wrapper = styled.section`
   .error-mismatch {
     margin-bottom: 15px;
   }
+
+/* styling for OTP section */
+.mb-3.d-flex.align-items-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center; 
+  margin-bottom: 1rem;
+}
+
+/* Style for the OTP input */
+.input-otp {
+  width: 200px; /* Adjust the width as needed */
+padding-left: 20px;
+margin: 0 10px;}
+
+/* Style for the "Submit OTP" button */
+.btn-submit-otp {
+  margin: 0 10px;
+}
+  
+  .popup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;}
+
+.popup-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+
+.popup-content .close {
+  position: absolute;
+  margin-left: 140px;
+  margin-bottom: 30px;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #555;
+  
+  border-radius: 50%;
+  padding: 5px;
+}
+.popup-content .close:hover {
+  color: red;
+}
+.popup.success .popup-content {
+  border: 2px solid #00ff00; /* Green border for success */
+}
+
+.popup.error .popup-content {
+  border: 2px solid #ff0000; /* Red border for error */
+}
+
+.popup.success .popup-content {
+  color: #00ff00; /* Green text for success */
+}
+
+.popup.error .popup-content {
+  color: #ff0000; /* Red text for error */
+}
 
 
   .btn-primary {
@@ -942,16 +1168,27 @@ header {
 /* Updated CSS for a smaller password strength bar */
 
 .password-strength-bar {
-  width: 100%;
+  width: 20%;
   height: 4px; /* Adjust the height for a smaller bar */
   background-color: #f0f0f0; /* Base color of the strength bar */
   border-radius: 5px;
   margin-top: 5px;
+  overflow: hidden;
 }
 
 .strength-indicator {
   height: 100%;
   border-radius: 5px;
+  width: 5%;
+}
+
+
+.password-strength-text {
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  color: black; /* Set the font color to black */
 }
 
 /* Adjust the colors for weak, average, and strong */
