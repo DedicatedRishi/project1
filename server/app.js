@@ -17,6 +17,7 @@ mongoose.connect("mongodb://localhost:27017/user");
 //Signup and login
 app.use("/email", emailRoutes);
 
+
 // Function to generate a four-digit unique user ID
 const generateUniqueUserId = async () => {
     // Find the highest existing user ID in the database
@@ -35,8 +36,7 @@ const generateUniqueUserId = async () => {
 };
 
 
-
-// User Login
+// User Login  
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
     UserModel.findOne({ email: email })
@@ -75,4 +75,5 @@ app.post('/register', async (req, res) => {
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log("Server is Running on port 3001")
+    
 })       

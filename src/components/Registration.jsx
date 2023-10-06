@@ -1,11 +1,10 @@
-import React, { useState, useRef,useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 
 
-
-const Registration = (props) => {
+const Registration = () => {
 
   const [userId, setUserId] = useState('')
   const [role, setRole] = useState('')
@@ -24,9 +23,8 @@ const Registration = (props) => {
   const [recaptchaValue, setRecaptchaValue] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showSubmitButton, setShowSubmitButton] = useState(false);
-  const[data,setData]=useState()
+  const [userotp, setUserotp] = useState()
 
-   
 
   const handleEmailChange = (event) => {
     const enteredEmail = event.target.value;
@@ -38,20 +36,18 @@ const Registration = (props) => {
     // Update the state to show/hide the OTP button based on email validation
     setShowOtpButton(isValidEmail);
   };
-     
-    const handleSendOtp = () => {
+
+  const handleSendOtp = () => {
     // Simulate sending a 4-digit OTP
-       let mailOtp =1415
-        // if(mailOtp == otp){
-        //   alert("Email Verified Successfuly")
-        // }
-        // else{
-        //   alert("Invaild OTP")
-        // } 
-        console.log('test')
-        
-      };
-  
+
+    if (userotp == otp) {
+      alert("Email Verified Successfuly")
+    }
+    else {
+      alert("Invaild OTP")
+    }
+  };
+
   const handleOtpChange = (event) => {
     const enteredOtp = event.target.value;
     setOtp(enteredOtp);
@@ -99,14 +95,14 @@ const Registration = (props) => {
 
   const baseUrl = "http://localhost:3001";
 
-  const sendEmail =  async(e) => {
+  const sendEmail = async (e) => {
     e.preventDefault()
-    
+
     let dataSend = {
       email: email,
     };
-    
-    const res =await fetch(`${baseUrl}/email/sendEmail`, {
+
+    const res = await fetch(`${baseUrl}/email/sendEmail`, {
       method: "POST",
       body: JSON.stringify(dataSend),
       headers: {
@@ -114,27 +110,24 @@ const Registration = (props) => {
         "Content-Type": "application/json",
       },
     })
-    
-    // HANDLING ERRORS
-    .then((res) => {
-      console.log(res);
-      
-      if (res.status > 199 && res.status < 300) {
-        alert("OTP Send Successfully !");
-      }
-      if(res.ok){
-         let data= res.json()
-         console.log(`otp is:${data.otp}`)
-        }
-      else{ 
-        alert("Process Failed")
-      }
-      });
-    };
-    
 
-   
-// Submit Form
+      // HANDLING ERRORS
+
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === 'Email sent successfully') {
+          const sotp = data.otp
+          alert("OTP Send Successfully !")
+          console.log('otp is:', sotp)
+          setUserotp(sotp)
+        } else {
+          alert("Process Failed")
+        }
+      })
+  };
+
+
+  // Submit Form
   const handlesubmit = (e) => {
 
     e.preventDefault()
@@ -166,7 +159,7 @@ const Registration = (props) => {
   return (
     <Wrapper>
       <h1>Register</h1>
-      
+
       <div className="mb-3">
         <label htmlFor="role" className="form-label">
           Role:
@@ -360,7 +353,6 @@ const Registration = (props) => {
           Register
         </button>
       </form>
-
 
     </Wrapper>
   );
