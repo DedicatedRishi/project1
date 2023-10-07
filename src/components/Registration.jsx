@@ -921,6 +921,9 @@ const Registration = () => {
 };
 
 const Wrapper = styled.section`
+@media (max-width: 800px){
+  width: 80%;
+}
     width: 50%;
   margin: auto;
   padding: 20px;
