@@ -10,7 +10,7 @@ const Registration = () => {
   
   const [registrationType, setRegistrationType] = useState('');
   const [email, setEmail] = useState('');
-  const [showOtpButton, setShowOtpButton] = useState(true);
+  const [showOtpButton, setShowOtpButton] = useState(false);
   const [otp, setOtp] = useState('');
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
@@ -25,11 +25,11 @@ const Registration = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [captcha, setCaptcha] = useState(generateCaptcha());
-  const [isCaptchaEntered, setIsCaptchaEntered] = useState(false);
-  const [isCaptchaSubmitted, setIsCaptchaSubmitted] = useState(false);
+  const [isCaptchaEntered, setIsCaptchaEntered] = useState(true);
+  const [isCaptchaSubmitted, setIsCaptchaSubmitted] = useState(true);
+  const [showCaptchaMessage, setShowCaptchaMessage] = useState('');
+  const [enteredCaptcha, setEnteredCaptcha] = useState('');
 
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [showErrorPopup, setShowErrorPopup] = useState(false);
 
 
   const handleRoleChange = (event) => {
@@ -108,10 +108,6 @@ const Registration = () => {
   const closePopup = () => {
     setIsOtpVerified(false);
     setIsInvalidOtp(false);
-     // If OTP is verified, hide the OTP section
-     if (isOtpVerified) {
-      setShowOtpButton(false);
-    }
   };
 
 
@@ -207,36 +203,26 @@ const Registration = () => {
   };
 
   const handleCaptchaChange = (event) => {
+    setEnteredCaptcha(event.target.value);
+
     const enteredCaptcha = event.target.value;
     // Assuming the captcha length is 6 characters, you can modify this accordingly
     setIsCaptchaEntered(enteredCaptcha.length === 6);
   };
   
   const handleSubmitCaptcha = () => {
-    // Assuming the captcha is considered submitted when it's non-empty, you can modify this accordingly
-    setIsCaptchaSubmitted(true);
-
-    // Show the appropriate popup based on captcha validation
-    if (isCaptchaEntered && isCaptchaSubmitted) {
-      setShowSuccessPopup(true);
+    const correctCaptcha = captcha; 
+   
+    if (enteredCaptcha === correctCaptcha) {
+      setShowCaptchaMessage('Entered captcha is correct');
+      // Logic for handling correct captcha submission
+      console.log('Captcha is correct!');
     } else {
-      setShowErrorPopup(true);
+      setShowCaptchaMessage('Entered captcha is wrong');
     }
   };
-
-  const closeErrorPopup = () => {
-    setShowErrorPopup(false);
-  };
-
-  const handleRegisterButtonClick = () => {
-    if (showSubmitButton) {
-      // Submit the form or handle registration logic here
-      handleFormSubmit();
-    } else {
-      // Show an error message or perform any other necessary actions
-      setShowErrorPopup(true);
-    }
-  };
+  
+ 
 
   return (
     <Wrapper>
@@ -348,12 +334,11 @@ const Registration = () => {
           </label>
           <input
               type="email"
-              className={`form-control ${isOtpVerified ? 'disabled' : ''}`}
+              className="form-control"
               id="email"
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
-              disabled={isOtpVerified}
             />        </div>
         
        
@@ -368,25 +353,19 @@ const Registration = () => {
        
         
             <label htmlFor="otp" className="form-label">
-              
+              OTP
             </label>
             <input
               type="number"
-              className={`form-control input-otp ${isOtpVerified ? 'disabled' : ''}`}              id="otp"
+              className="form-control input-otp"
+              id="otp"
               placeholder="Enter 4-digit OTP"
               value={otp}
               onChange={handleOtpChange}
               maxLength={4}
-              disabled={isOtpVerified}
-
             />
         
-        <button
-      type="submit"
-      className={`btn btn-primary btn-submit-otp ${isOtpVerified ? 'disabled' : ''}`}
-      onClick={handleOtpVerification}
-      disabled={!otp || otp.length !== 4}
-    >
+          <button type="submit" className="btn btn-primary btn-submit-otp"  onClick={handleOtpVerification}  disabled={!otp || otp.length !== 4} >
               Submit
             </button>
            
@@ -399,7 +378,7 @@ const Registration = () => {
             <span className="close" onClick={closePopup}>
               &times;
             </span>
-              Verification Done 
+            Verification Done
           </div>
         </div>
       )}
@@ -410,7 +389,7 @@ const Registration = () => {
             <span className="close" onClick={closePopup}>
               &times;
             </span>
-            Invalid Otp
+            Invalid OTP
           </div>
         </div>
       )}
@@ -486,12 +465,12 @@ const Registration = () => {
           onChange={handleConfirmPasswordChange}
         />
         {confirmPassword !== password && confirmPassword && (
-          <div className="error-text-confirm">*Passwords do not match.</div>
+          <div className="error-text">*Passwords do not match.</div>
         )}
       </div>
 
 
-           {/* Add reCAPTCHA */}
+         {/* Add reCAPTCHA */}
          {/* Captcha Generator */}
          <div className="container">
         <header>Captcha Verification</header>
@@ -504,28 +483,19 @@ const Registration = () => {
         <div className="input_field captch_input">
           <input type="text" placeholder="Enter captcha" onChange={handleCaptchaChange} />
         </div>
-        <div className="message">Entered captcha is correct</div>
-        <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
-  <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
-  
+
+        <div className={`message ${showCaptchaMessage ? 'active' : ''}`}>
+  {showCaptchaMessage}
 </div>
-      </div>
-      <div className={`popup ${showSuccessPopup ? 'success' : ''}`}>
-        <div className="popup-content">
-          <span className="close" onClick={() => setShowSuccessPopup(false)}>&times;</span>
-          Verification Done
-        </div>
+      
+      <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
+        <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
       </div>
 
-    
-<div className={`popup ${showErrorPopup ? 'error' : ''}`}>
-  <div className="popup-content">
-    <span className="close" onClick={closeErrorPopup}>&times;</span>
-    Invalid Captcha
-  </div>
-</div>
+      </div>
 
-      {   showSubmitButton ? (
+
+      { email && mobile && password && confirmPassword && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct' ? (
   <button type="submit" className="btn btn-primary">
     Register
   </button>
@@ -569,12 +539,11 @@ const Registration = () => {
           </label>
           <input
               type="email"
-              className={`form-control ${isOtpVerified ? 'disabled' : ''}`}
+              className="form-control"
               id="email"
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
-              disabled={isOtpVerified}
             />        </div>
         
        
@@ -589,25 +558,19 @@ const Registration = () => {
        
         
             <label htmlFor="otp" className="form-label">
-              
+              OTP
             </label>
             <input
               type="number"
-              className={`form-control input-otp ${isOtpVerified ? 'disabled' : ''}`}              id="otp"
+              className="form-control input-otp"
+              id="otp"
               placeholder="Enter 4-digit OTP"
               value={otp}
               onChange={handleOtpChange}
               maxLength={4}
-              disabled={isOtpVerified}
-
             />
         
-        <button
-      type="submit"
-      className={`btn btn-primary btn-submit-otp ${isOtpVerified ? 'disabled' : ''}`}
-      onClick={handleOtpVerification}
-      disabled={!otp || otp.length !== 4}
-    >
+          <button type="submit" className="btn btn-primary btn-submit-otp"  onClick={handleOtpVerification}  disabled={!otp || otp.length !== 4} >
               Submit
             </button>
            
@@ -620,7 +583,7 @@ const Registration = () => {
             <span className="close" onClick={closePopup}>
               &times;
             </span>
-              Verification Done 
+            Verification Done
           </div>
         </div>
       )}
@@ -631,10 +594,11 @@ const Registration = () => {
             <span className="close" onClick={closePopup}>
               &times;
             </span>
-            Invalid Otp
+            Invalid OTP
           </div>
         </div>
       )}
+
 
 
 
@@ -644,7 +608,6 @@ const Registration = () => {
           </label>
           <input type="text" className="form-control" id="mobile" placeholder="Mobile No" />
         </div>
-       
      
 
         <div className="mb-3">
@@ -701,15 +664,14 @@ const Registration = () => {
           onChange={handleConfirmPasswordChange}
         />
         {confirmPassword !== password && confirmPassword && (
-          <div className="error-text-confirm">*Passwords do not match.</div>
+          <div className="error-text">*Passwords do not match.</div>
         )}
       </div>
 
 
          {/* Add reCAPTCHA */}
-     
-       {/* Captcha Generator */}
-       <div className="container">
+         {/* Captcha Generator */}
+         <div className="container">
         <header>Captcha Generator</header>
         <div className="input_field captch_box">
           <input type="text" value={captcha} disabled />
@@ -718,13 +680,21 @@ const Registration = () => {
           </button>
         </div>
         <div className="input_field captch_input">
-          <input type="text" placeholder="Enter captcha"  onChange={handleCaptchaChange} />
+          <input type="text" placeholder="Enter captcha" onChange={handleCaptchaChange} />
         </div>
-        <div className="message">Entered captcha is correct</div>
-        
+
+        <div className={`message ${showCaptchaMessage ? 'active' : ''}`}>
+  {showCaptchaMessage}
+</div>
+      
+      <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
+        <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
       </div>
 
-      { isCaptchaEntered && isCaptchaSubmitted && showSubmitButton ? (
+      </div>
+
+
+      { email && mobile && password && confirmPassword && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct' ? (
   <button type="submit" className="btn btn-primary">
     Register
   </button>
@@ -769,12 +739,11 @@ const Registration = () => {
           </label>
           <input
               type="email"
-              className={`form-control ${isOtpVerified ? 'disabled' : ''}`}
+              className="form-control"
               id="email"
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
-              disabled={isOtpVerified}
             />        </div>
         
        
@@ -789,25 +758,19 @@ const Registration = () => {
        
         
             <label htmlFor="otp" className="form-label">
-              
+              OTP
             </label>
             <input
               type="number"
-              className={`form-control input-otp ${isOtpVerified ? 'disabled' : ''}`}              id="otp"
+              className="form-control input-otp"
+              id="otp"
               placeholder="Enter 4-digit OTP"
               value={otp}
               onChange={handleOtpChange}
               maxLength={4}
-              disabled={isOtpVerified}
-
             />
         
-        <button
-      type="submit"
-      className={`btn btn-primary btn-submit-otp ${isOtpVerified ? 'disabled' : ''}`}
-      onClick={handleOtpVerification}
-      disabled={!otp || otp.length !== 4}
-    >
+          <button type="submit" className="btn btn-primary btn-submit-otp"  onClick={handleOtpVerification}  disabled={!otp || otp.length !== 4} >
               Submit
             </button>
            
@@ -820,7 +783,7 @@ const Registration = () => {
             <span className="close" onClick={closePopup}>
               &times;
             </span>
-              Verification Done 
+            Verification Done
           </div>
         </div>
       )}
@@ -831,7 +794,7 @@ const Registration = () => {
             <span className="close" onClick={closePopup}>
               &times;
             </span>
-            Invalid Otp
+            Invalid OTP
           </div>
         </div>
       )}
@@ -902,14 +865,14 @@ const Registration = () => {
           onChange={handleConfirmPasswordChange}
         />
         {confirmPassword !== password && confirmPassword && (
-          <div className="error-text-confirm">*Passwords do not match.</div>
+          <div className="error-text">*Passwords do not match.</div>
         )}
       </div>
 
 
-         {/* Add reCAPTCHA */}
-       {/* Captcha Generator */}
-       <div className="container">
+          {/* Add reCAPTCHA */}
+         {/* Captcha Generator */}
+         <div className="container">
         <header>Captcha Generator</header>
         <div className="input_field captch_box">
           <input type="text" value={captcha} disabled />
@@ -918,15 +881,21 @@ const Registration = () => {
           </button>
         </div>
         <div className="input_field captch_input">
-          <input type="text" placeholder="Enter captcha"  onChange={handleCaptchaChange}  />
+          <input type="text" placeholder="Enter captcha" onChange={handleCaptchaChange} />
         </div>
-        <div className="message">Entered captcha is correct</div>
-        <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
-  <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
+
+        <div className={`message ${showCaptchaMessage ? 'active' : ''}`}>
+  {showCaptchaMessage}
 </div>
+      
+      <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
+        <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
       </div>
 
-      { isCaptchaEntered && isCaptchaSubmitted &&  showSubmitButton ? (
+      </div>
+
+
+      { email && mobile && password && confirmPassword && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct' ? (
   <button type="submit" className="btn btn-primary">
     Register
   </button>
@@ -1006,12 +975,6 @@ const Wrapper = styled.section`
     margin-top: 5px;
   }
 
-  .error-text-confirm {
-  color: red;
-}
-
-  
-
   .error-mismatch {
     margin-bottom: 15px;
   }
@@ -1088,20 +1051,6 @@ margin: 0 10px;}
   color: #ff0000; /* Red text for error */
 }
 
-
-.form-control.disabled {
-  filter: blur(5px); /* Add the desired blur effect for disabled elements */
-  pointer-events: none; /* Disable pointer events on the element */
-}
-
-.input-otp.disabled {
-  filter: blur(5px); /* Add the desired blur effect for disabled elements */
-  pointer-events: none; /* Disable pointer events on the element */
-}
-
-.btn-submit-otp.disabled {
-  pointer-events: none; /* Disable pointer events on the element */
-}
 
   .btn-primary {
     background-color: #222;
@@ -1186,13 +1135,15 @@ header {
 .message {
   font-size: 14px;
   margin: 14px 0;
-  color: #826afb;
   display: none;
 }
 
 .message.active {
   display: block;
+  color: #826afb ; /* Set the color to green for the correct captcha */
 }
+
+
 
 .button button {
   background: #826afb;
@@ -1219,7 +1170,6 @@ header {
   opacity: 1;
   pointer-events: auto;
 }
-
 
 
 
