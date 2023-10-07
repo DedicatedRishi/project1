@@ -8,6 +8,7 @@ import SchoolDesign from './components/SchoolDesign'
 import LandscapeDesign from './components/LandscapeDesign'
 import Rules from './pages/Rules'
 import ContactUs from './pages/ContactUs'
+import Registration from './components/Registration'
 
 
 const App = () => {
@@ -22,7 +23,7 @@ const App = () => {
         <Route path='/categories/landscapedesign' element={<LandscapeDesign />} />  
         <Route path='/contactus' element={<ContactUs />} />
         <Route path='/rules' element={<Rules />} />  
-        
+        <Route path='/register' element={<Registration />} />  
         <Route path='/footer' element={<Footer />} />
       </Routes>
    <Footer />

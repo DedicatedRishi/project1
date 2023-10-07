@@ -50,7 +50,7 @@ const Header = () => {
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a className="dropdown-item" href="#" onClick={closeNavbar}>Login</a></li>
                                 <li><hr className="dropdown-divider" /></li>
-                                <li><a className="dropdown-item" href="#" onClick={closeNavbar}>Register</a></li>
+                                <li><NavLink className="dropdown-item" to={"/register"} onClick={closeNavbar}>Register</NavLink></li>
                             </ul>
                         </li>
                         <li className="nav-item">
