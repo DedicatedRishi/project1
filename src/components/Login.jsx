@@ -44,7 +44,7 @@ width: 50%;
 margin: auto;
 padding: 20px;
 background-color: #2222;
-background: url('/pratik/images/Reg-Background.jpg') no-repeat center center fixed;
+background: url('/pratik/images/bg.jpg') no-repeat center center fixed;
 border-radius: 10px;
 box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 `

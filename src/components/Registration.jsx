@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
+import Bg from '../../public/pratik/images/bg.jpg';
 
 
 const Registration = () => {
@@ -20,10 +22,19 @@ const Registration = () => {
   const [mobileNo, setMobileNo] = useState('')
   const [showOtpButton, setShowOtpButton] = useState(false);
   const [teamLeaderName, setTeamLeaderName] = useState('')
-  const [recaptchaValue, setRecaptchaValue] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [userotp, setUserotp] = useState()
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [isInvalidOtp, setIsInvalidOtp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [captcha, setCaptcha] = useState(generateCaptcha());
+  const [isCaptchaEntered, setIsCaptchaEntered] = useState(true);
+  const [isCaptchaSubmitted, setIsCaptchaSubmitted] = useState(true);
+  const [showCaptchaMessage, setShowCaptchaMessage] = useState('');
+  const [enteredCaptcha, setEnteredCaptcha] = useState('');
+
+
 
 
   const handleEmailChange = (event) => {
@@ -37,14 +48,16 @@ const Registration = () => {
     setShowOtpButton(isValidEmail);
   };
 
-  const handleSendOtp = () => {
+  const handleSendOtp = (e) => {
     // Simulate sending a 4-digit OTP
-
+    e.preventDefault()
     if (userotp == otp) {
-      alert("Email Verified Successfuly")
+      setIsOtpVerified(true);
+      setIsInvalidOtp(false);
     }
     else {
-      alert("Invaild OTP")
+      setIsOtpVerified(false);
+      setIsInvalidOtp(true);
     }
   };
 
@@ -54,10 +67,7 @@ const Registration = () => {
     setShowSubmitButton(enteredOtp.length === 4);
   };
 
-  const handleRecaptchaChange = (value) => {
-    // Handle reCAPTCHA value change
-    setRecaptchaValue(value);
-  };
+
 
 
   const handlePasswordChange = (event) => {
@@ -85,6 +95,111 @@ const Registration = () => {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
       password
     );
+  };
+  // add new code
+
+  const handleRoleChange = (event) => {
+    const selectedRole = event.target.value;
+    setRole(selectedRole);
+
+    // Reset registration type and other fields when role changes
+
+    setEmail('');
+    setShowOtpButton(false);
+    setOtp('');
+    setShowSubmitButton(false);
+    setPassword('');
+    setConfirmPassword('');
+  };
+  const closePopup = () => {
+    setIsOtpVerified(false);
+    setIsInvalidOtp(false);
+  };
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleToggleConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+
+  const calculatePasswordStrength = (password) => {
+    // Define your password strength criteria here
+    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+    const averageRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (strongRegex.test(password)) {
+      return 'strong';
+    } else if (averageRegex.test(password)) {
+      return 'average';
+    } else {
+      return 'weak';
+    }
+  };
+
+  const getPasswordStrengthColor = (strength) => {
+    switch (strength) {
+      case 'weak':
+        return 'red';
+      case 'average':
+        return 'orange';
+      case 'strong':
+        return 'green';
+      default:
+        return 'transparent';
+    }
+  };
+
+  const getPasswordStrengthText = (strength) => {
+    switch (strength) {
+      case 'weak':
+        return 'Weak';
+      case 'average':
+        return 'Average';
+      case 'strong':
+        return 'Strong';
+      default:
+        return '';
+    }
+  };
+
+
+  function generateCaptcha() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+
+  const handleRefreshCaptcha = (e) => {
+    e.preventDefault()
+    setCaptcha(generateCaptcha());
+  };
+
+  const handleCaptchaChange = (event) => {
+    event.preventDefault()
+    setEnteredCaptcha(event.target.value);
+
+    const enteredCaptcha = event.target.value;
+    // Assuming the captcha length is 6 characters, you can modify this accordingly
+    setIsCaptchaEntered(enteredCaptcha.length === 6);
+  };
+
+  const handleSubmitCaptcha = (e) => {
+    e.preventDefault()
+    const correctCaptcha = captcha;
+
+    if (enteredCaptcha === correctCaptcha) {
+      setShowCaptchaMessage('Entered captcha is correct');
+      // Logic for handling correct captcha submission
+      console.log('Captcha is correct!');
+    } else {
+      setShowCaptchaMessage('Entered captcha is wrong');
+    }
   };
 
   // Backend code
@@ -117,7 +232,7 @@ const Registration = () => {
       .then((data) => {
         if (data.message === 'Email sent successfully') {
           const sotp = data.otp
-          alert("OTP Send Successfully !")
+          alert("OTP Send Successfully in Your Mail !")
           console.log('otp is:', sotp)
           setUserotp(sotp)
         } else {
@@ -150,8 +265,19 @@ const Registration = () => {
     })
       .then(result => {
         console.log(result)
-        clearRef.current.value = ''
         alert('User Register Successfully')
+        clearRef.current.value = ''
+        setEmail('')
+        setName('')
+        setOtp('')
+        setMobileNo('')
+        setTeamLeaderName('')
+        setMember1('')
+        setMember2('')
+        setMember3('')
+        setMember4('')
+        setPassword('')
+        setConfirmPassword('')
       })
       .catch(err => console.log(err))
   }
@@ -169,7 +295,7 @@ const Registration = () => {
           id="role"
           name='role'
           value={role}
-          onChange={(e) => setRole(e.target.value)}
+          onChange={handleRoleChange}
         >
           <option >Select Role</option>
           <option value="student">Student</option>
@@ -262,61 +388,101 @@ const Registration = () => {
           <label htmlFor="email" className="form-label">
             Email
           </label>
-          <input type="email" className="form-control" id="email" ref={clearRef} placeholder="Email" name='email' value={email} onChange={handleEmailChange} required />
+          <input type="email" className="form-control" id="email" ref={clearRef} placeholder="Email" name='email' value={email} onChange={handleEmailChange} />
         </div>
 
         {showOtpButton && (
-
-          <button className="btn btn-secondary" onClick={(e) => sendEmail(e)}>
-            Send OTP
-          </button>
+          <div className="mb-3 d-flex align-items-center">
+            <button className="btn btn-secondary" onClick={(e) => sendEmail(e)}>
+              Send OTP
+            </button>
+            <label htmlFor="otp" className="form-label">
+              OTP
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="otp"
+              placeholder="Enter 4-digit OTP"
+              value={otp}
+              onChange={handleOtpChange}
+              maxLength={4}
+            />
+            <button className="btn btn-primary btn-submit-otp" onClick={(e) => handleSendOtp(e)} disabled={!otp || otp.length !== 4}>
+              Submit
+            </button>
+          </div>
         )}
 
-        <div className="mb-3">
-          <label htmlFor="otp" className="form-label">
-            OTP
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="otp"
-            placeholder="Enter 4-digit OTP"
-            value={otp}
-            onChange={handleOtpChange}
-            maxLength={4}
-          />
-        </div>
+        {isOtpVerified && (
+          <div className="popup success">
+            <div className="popup-content">
+              <span className="close" onClick={closePopup}>
+                &times;
+              </span>
+              Verification Done
+            </div>
+          </div>
+        )}
 
-        {showSubmitButton && (
-          <button className="btn btn-primary" onClick={handleSendOtp}>
-            Submit
-          </button>
+        {isInvalidOtp && (
+          <div className="popup error">
+            <div className="popup-content">
+              <span className="close" onClick={closePopup}>
+                &times;
+              </span>
+              Invalid OTP
+            </div>
+          </div>
         )}
 
         <div className="mb-3">
           <label htmlFor="mobile" className="form-label">
             Mobile No
           </label>
-          <input type="number" className="form-control" id="mobile" ref={clearRef} placeholder="Mobile No" name='mobileNo' value={mobileNo} onChange={(e) => setMobileNo(e.target.value)} required />
+          <input type="number" className="form-control" id="mobile" ref={clearRef} placeholder="Mobile No" name='mobileNo' value={mobileNo} onChange={(e) => setMobileNo(e.target.value)} />
         </div>
 
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
             Password
           </label>
-          <input
-            type="password"
-            className="form-control"
-            id="password"
-            placeholder="Password"
-            ref={clearRef}
-            name='password'
-            value={password}
-            onChange={handlePasswordChange}
-            required
-          />
+          <div className="input-group">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className="form-control"
+              id="password"
+              placeholder="Password"
+              ref={clearRef}
+              name='password'
+              value={password}
+              onChange={handlePasswordChange}
+
+            />
+            <button
+              type="button"
+              className="btn btn-light"
+              onClick={handleTogglePassword}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          <div className="password-strength-bar">
+            <div
+              className="strength-indicator"
+              style={{
+                width: `${(password.length / 12) * 100}%`,
+                backgroundColor: getPasswordStrengthColor(
+                  calculatePasswordStrength(password)
+                ),
+              }}
+            ></div>
+          </div>
+          <div className={`password-strength-text ${calculatePasswordStrength(password)}`}>
+            {password.length === 0 ? 'Password Strength' : getPasswordStrengthText(calculatePasswordStrength(password))}
+          </div>
           {!isValidPassword(password) && (
-            <div className="error-text">
+            <div className="error-text changebyrishi">
               * Password must be at least 8 characters, contain at least one special character, one number, one capital and one lowercase letter.
             </div>
           )}
@@ -342,16 +508,43 @@ const Registration = () => {
 
 
         {/* Add reCAPTCHA */}
-        <div className="mb-3">
-          <ReCAPTCHA
-            sitekey="6LdRm1woAAAAAK_U2fg95ODO9VASg3Kw0voB1nB8" // Replace with your reCAPTCHA site key
-            onChange={handleRecaptchaChange}
-          />
+        <div className="container">
+          <header>Captcha Verification</header>
+          <div className="input_field captch_box">
+            <input type="text" value={captcha} disabled />
+            <button className="refresh_button" onClick={handleRefreshCaptcha}>
+              <i className="fa-solid fa-rotate-right"></i>
+            </button>
+          </div>
+          <div className="input_field captch_input">
+            <input type="text" placeholder="Enter captcha" onChange={handleCaptchaChange} />
+          </div>
+
+          <div className={`message ${showCaptchaMessage ? 'active' : ''}`}>
+            {showCaptchaMessage}
+          </div>
+
+          <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
+            <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
+          </div>
+
+        </div>
+        {email && mobile && password && confirmPassword && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct'
+          ? (
+            <button className="btn btn-primary mt-2" onClick={(e) => handlesubmit(e)}>
+              Register
+            </button>
+          ) : (
+            <button className="btn btn-primary mt-2" onClick={(e) => handlesubmit(e)} disabled>
+              Register
+            </button>
+          )
+        }
+        <div className="already-have-account">
+          {/* <span className="login-text">Login</span> */}
+          Already have an account? <NavLink className="navbar-brand nav_brands login-text" to={'/login'}>Login</NavLink>
         </div>
 
-        <button className="btn btn-primary" onClick={(e) => handlesubmit(e)}>
-          Register
-        </button>
       </form>
 
     </Wrapper>
@@ -359,11 +552,14 @@ const Registration = () => {
 };
 
 const Wrapper = styled.section`
-  width: 50%;
+@media (max-width: 800px){
+  width: 80%;
+}
+    width: 50%;
   margin: auto;
   padding: 20px;
-  background-color: #2222;
-  background: url('/pratik/images/Reg-Background.jpg') no-repeat center center fixed;
+  background-color: #fff;
+
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 
@@ -403,9 +599,11 @@ const Wrapper = styled.section`
     box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
   }
 
-
+  .changebyrishi{
+    color: yellow !important;
+  }
   .error-text {
-    color: red;
+    color: green;
     font-size: 0.9em;
     margin-top: 5px;
   }
@@ -413,6 +611,78 @@ const Wrapper = styled.section`
   .error-mismatch {
     margin-bottom: 15px;
   }
+
+/* styling for OTP section */
+.mb-3.d-flex.align-items-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center; 
+  margin-bottom: 1rem;
+}
+
+/* Style for the OTP input */
+.input-otp {
+  width: 200px; /* Adjust the width as needed */
+padding-left: 20px;
+margin: 0 10px;}
+
+/* Style for the "Submit OTP" button */
+.btn-submit-otp {
+  margin: 0 10px;
+}
+  
+  .popup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;}
+
+.popup-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+
+.popup-content .close {
+  position: absolute;
+  margin-left: 140px;
+  margin-bottom: 30px;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #555;
+  
+  border-radius: 50%;
+  padding: 5px;
+}
+.popup-content .close:hover {
+  color: red;
+}
+.popup.success .popup-content {
+  border: 2px solid #00ff00; /* Green border for success */
+}
+
+.popup.error .popup-content {
+  border: 2px solid #ff0000; /* Red border for error */
+}
+
+.popup.success .popup-content {
+  color: #00ff00; /* Green text for success */
+}
+
+.popup.error .popup-content {
+  color: #ff0000; /* Red text for error */
+}
 
 
   .btn-primary {
@@ -427,15 +697,193 @@ const Wrapper = styled.section`
   }
 
   
+  .container {
+  position: relative;
+  max-width: 300px;
+  width: 100%;
+  border-radius: 12px;
+  padding: 15px 25px 25px;
+  background: #fff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+}
 
-  .captcha-image {
-    width: 100%;
-    max-width: none;
-    border-radius: 0;
+header {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.input_field {
+  position: relative;
+  height: 45px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.refresh_button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: #826afb;
+  height: 30px;
+  width: 30px;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+}
+
+.refresh_button:active {
+  transform: translateY(-50%) scale(0.98);
+}
+
+.input_field input,
+.button button {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+}
+
+.input_field input {
+  padding: 0 15px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.captch_box input {
+  color: #6b6b6b;
+  font-size: 22px;
+  pointer-events: none;
+}
+
+.captch_input input:focus {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.message {
+  font-size: 14px;
+  margin: 14px 0;
+  display: none;
+}
+
+.message.active {
+  display: block;
+  color: #826afb ; /* Set the color to green for the correct captcha */
+}
+
+
+
+.button button {
+  background: #826afb;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.button button:hover {
+  background: #6345d1; /* Adjust the hover background color as needed */
+}
+
+.button button:active {
+  transform: scale(0.99);
+}
+
+.button button.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.button button.enabled {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+
+
+  .input-group .btn .eye-icon {
+  fill: white;
+  width: 20px; /* Adjust width to make it smaller */
+  height: 20px; /* Adjust height to make it smaller */
+}
+
+.input-group .btn-light:hover .eye-icon {
+  fill: white;
+  width: 20px; /* Adjust width to make it smaller */
+  height: 20px; /* Adjust height to make it smaller */
+}
+
+.input-group .btn-light:focus .eye-icon {
+  fill: white;
+  width: 20px; /* Adjust width to make it smaller */
+  height: 20px; /* Adjust height to make it smaller */
+}
+
+/* Updated CSS for a smaller password strength bar */
+
+.password-strength-bar {
+  width: 20%;
+  height: 4px; /* Adjust the height for a smaller bar */
+  background-color: #f0f0f0; /* Base color of the strength bar */
+  border-radius: 5px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.strength-indicator {
+  height: 100%;
+  border-radius: 5px;
+  width: 5%;
+}
+
+
+.password-strength-text {
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  color: black; /* Set the font color to black */
+}
+
+/* Adjust the colors for weak, average, and strong */
+.strength-indicator {
+  background-color: transparent; /* Default color */
+}
+
+.strength-indicator.average {
+  background-color: orange; /* Color for average strength */
+}
+
+.strength-indicator.strong {
+  background-color: green; /* Color for strong strength */
+}
+
+
+.already-have-account {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.1em;
   }
 
+  .login-link {
+  text-decoration: none;
+}
 
+background: url(${Bg}) no-repeat center center fixed;
+     background-size: cover;
 
+.login-text {
+  color: blue; /* or any other color you prefer */
+  /* Add any other styles you want for the login text */
+}
+
+  
 
  
 

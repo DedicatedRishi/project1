@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   },
   role: String,
   type: String,
-  teamLeaderName: String,
+  teamLeaderName: String,  
   member1: String,
   member2: String,
   member3: String,
@@ -16,22 +16,20 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: {
     type: String,
-    required: true,
+    required:false,
     unique: true,
   },
   mobileNo: String,
   password: String,
-  pdfFilePath: {
-    type: String,
-  },
- registrationDate: {
+  
+  registrationDate: {
     type: Date,
     default: Date.now,
   },
   lastLogin: {
     type: Date,
   },
-
+ 
 });
 
 const UserModel = mongoose.model('users', userSchema);

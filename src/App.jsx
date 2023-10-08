@@ -12,17 +12,19 @@ import Registration from './components/Registration';
 
 
 
+
 const App = () => {
   return (
     <>
       <Header />
+      
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/schooldesign' element={<SchoolDesign />} />
         <Route path='/landscapedesign' element={<LandscapeDesign />} />
         <Route path='/register' element={<Registration />} />
         <Route path='/login' element={<Login />} />
-     </Routes>
+        </Routes>
      
     <Footer/>
     </>

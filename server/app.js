@@ -2,13 +2,13 @@ const express = require("express")
 const dotenv = require("dotenv");
 const emailRoutes = require("./routes/emailRoutes");
 const mongoose = require("mongoose")
-const UserModel = require('./models/User')
+const UserModel = require('./models/User') 
 const cors = require("cors")
 const app = express()
-dotenv.config();
+dotenv.config();  
 app.use(express.json())    
 app.use(cors())
-
+  
 
    
 // MongoDB Connection 
@@ -69,6 +69,8 @@ app.post('/register', async (req, res) => {
         res.status(500).json({ message: 'Server error' });  
     }  
 })             
+  
+
   
         
 // Server Listen    
