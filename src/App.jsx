@@ -9,6 +9,7 @@ import LandscapeDesign from './components/LandscapeDesign'
 import Rules from './pages/Rules'
 import ContactUs from './pages/ContactUs'
 import Registration from './components/Registration'
+import Login from './components/Login'
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/contactus' element={<ContactUs />} />
         <Route path='/rules' element={<Rules />} />  
         <Route path='/register' element={<Registration />} />  
+        <Route path='/login' element={<Login />} />
         <Route path='/footer' element={<Footer />} />
       </Routes>
    <Footer />

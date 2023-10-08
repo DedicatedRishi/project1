@@ -1,31 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
-
+import axios from 'axios';
 import Bg from '../public/images/pratik/bg.jpg';
 
 
-
 const Registration = () => {
-  const [role, setRole] = useState('');
-  
-  const [registrationType, setRegistrationType] = useState('');
-  const [email, setEmail] = useState('');
-  const [showOtpButton, setShowOtpButton] = useState(false);
+
+  const [userId, setUserId] = useState('')
+  const [role, setRole] = useState('')
+  const [type, setType] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('');
+  const [member1, setMember1] = useState('')
+  const [member2, setMember2] = useState('')
+  const [member3, setMember3] = useState('')
+  const [member4, setMember4] = useState('')
+  const [password, setPassword] = useState('')
+  const [mobileNo, setMobileNo] = useState('')
+  const [showOtpButton, setShowOtpButton] = useState(false);
+  const [teamLeaderName, setTeamLeaderName] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const [userotp, setUserotp] = useState()
   const [isOtpVerified, setIsOtpVerified] = useState(false);
   const [isInvalidOtp, setIsInvalidOtp] = useState(false);
-
-
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
-  
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [captcha, setCaptcha] = useState(generateCaptcha());
   const [isCaptchaEntered, setIsCaptchaEntered] = useState(true);
   const [isCaptchaSubmitted, setIsCaptchaSubmitted] = useState(true);
@@ -34,25 +36,6 @@ const Registration = () => {
 
 
 
-  const handleRoleChange = (event) => {
-    const selectedRole = event.target.value;
-    setRole(selectedRole);
-
-    // Reset registration type and other fields when role changes
-    setRegistrationType('');
-    setEmail('');
-    setShowOtpButton(false);
-    setOtp('');
-    setShowSubmitButton(false);
-    setRecaptchaValue('');
-    setPassword('');
-    setConfirmPassword('');
-  };
-
-  const handleRegistrationTypeChange = (event) => {
-    setRegistrationType(event.target.value);
-
-  };
 
   const handleEmailChange = (event) => {
     const enteredEmail = event.target.value;
@@ -63,29 +46,20 @@ const Registration = () => {
 
     // Update the state to show/hide the OTP button based on email validation
     setShowOtpButton(isValidEmail);
-    
-  };  
-
-  
-  const handleSendOtp = () => {
-    // Backend developer: Send a request to the backend to generate and send OTP to the provided email.
-    // You will need to call a backend API that generates and sends OTP to the email.
-    // Example API request:
-    // POST /api/send-otp
-    // Request Body: { "email": email }
-    // Backend will generate the OTP, send it to the provided email, and respond with success or failure.
   };
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    // Backend developer: Send the entered OTP for verification to the backend.
-    // You will need to call a backend API that verifies the entered OTP.
-    // Example API request:
-    // POST /api/verify-otp
-    // Request Body: { "email": email, "otp": otp }
-    // Backend will verify the OTP and respond with success or failure.
+  const handleSendOtp = (e) => {
+    // Simulate sending a 4-digit OTP
+    e.preventDefault()
+    if (userotp == otp) {
+      setIsOtpVerified(true);
+      setIsInvalidOtp(false);
+    }
+    else {
+      setIsOtpVerified(false);
+      setIsInvalidOtp(true);
+    }
   };
-
 
   const handleOtpChange = (event) => {
     const enteredOtp = event.target.value;
@@ -93,24 +67,7 @@ const Registration = () => {
     setShowSubmitButton(enteredOtp.length === 4);
   };
 
-  const uOtp = 1010 ;
-  const handleOtpVerification = () => {
-    // Assuming you have a backend API to verify the OTP
-    // You would make an API call here to verify the OTP entered by the user
-    // For simplicity, we'll consider it verified if the entered OTP is '1234'
-    if (otp == uOtp) {
-      setIsOtpVerified(true);
-      setIsInvalidOtp(false);
-    } else {
-      setIsOtpVerified(false);
-      setIsInvalidOtp(true);
-    }
-  };
 
-  const closePopup = () => {
-    setIsOtpVerified(false);
-    setIsInvalidOtp(false);
-  };
 
 
   const handlePasswordChange = (event) => {
@@ -139,7 +96,25 @@ const Registration = () => {
       password
     );
   };
+  // add new code
 
+  const handleRoleChange = (event) => {
+    const selectedRole = event.target.value;
+    setRole(selectedRole);
+
+    // Reset registration type and other fields when role changes
+
+    setEmail('');
+    setShowOtpButton(false);
+    setOtp('');
+    setShowSubmitButton(false);
+    setPassword('');
+    setConfirmPassword('');
+  };
+  const closePopup = () => {
+    setIsOtpVerified(false);
+    setIsInvalidOtp(false);
+  };
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -154,7 +129,7 @@ const Registration = () => {
     // Define your password strength criteria here
     const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
     const averageRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
-  
+
     if (strongRegex.test(password)) {
       return 'strong';
     } else if (averageRegex.test(password)) {
@@ -163,7 +138,7 @@ const Registration = () => {
       return 'weak';
     }
   };
-  
+
   const getPasswordStrengthColor = (strength) => {
     switch (strength) {
       case 'weak':
@@ -189,7 +164,7 @@ const Registration = () => {
         return '';
     }
   };
-  
+
 
   function generateCaptcha() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -200,21 +175,24 @@ const Registration = () => {
     return result;
   }
 
-  const handleRefreshCaptcha = () => {
+  const handleRefreshCaptcha = (e) => {
+    e.preventDefault()
     setCaptcha(generateCaptcha());
   };
 
   const handleCaptchaChange = (event) => {
+    event.preventDefault()
     setEnteredCaptcha(event.target.value);
 
     const enteredCaptcha = event.target.value;
     // Assuming the captcha length is 6 characters, you can modify this accordingly
     setIsCaptchaEntered(enteredCaptcha.length === 6);
   };
-  
-  const handleSubmitCaptcha = () => {
-    const correctCaptcha = captcha; 
-   
+
+  const handleSubmitCaptcha = (e) => {
+    e.preventDefault()
+    const correctCaptcha = captcha;
+
     if (enteredCaptcha === correctCaptcha) {
       setShowCaptchaMessage('Entered captcha is correct');
       // Logic for handling correct captcha submission
@@ -223,8 +201,85 @@ const Registration = () => {
       setShowCaptchaMessage('Entered captcha is wrong');
     }
   };
-  
- 
+
+  // Backend code
+
+  const clearRef = useRef(null)
+
+  // Email Verification with Otp
+
+  const baseUrl = "http://localhost:3001";
+
+  const sendEmail = async (e) => {
+    e.preventDefault()
+
+    let dataSend = {
+      email: email,
+    };
+
+    const res = await fetch(`${baseUrl}/email/sendEmail`, {
+      method: "POST",
+      body: JSON.stringify(dataSend),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+
+      // HANDLING ERRORS
+
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === 'Email sent successfully') {
+          const sotp = data.otp
+          alert("OTP Send Successfully in Your Mail !")
+          console.log('otp is:', sotp)
+          setUserotp(sotp)
+        } else {
+          alert("Process Failed")
+        }
+      })
+  };
+
+
+  // Submit Form
+  const handlesubmit = (e) => {
+    e.preventDefault()
+    axios.post('http://localhost:3001/register', {
+      userId: '', // Generate this based on the latest user ID
+      role,
+      type,
+      teamLeaderName,
+      member1,
+      member2,
+      member3,
+      member4,
+      name,
+      email,
+      password,
+      mobileNo,
+      registrationDate: new Date(),
+      lastLogin: '',
+    })
+      .then(result => {
+        console.log(result)
+        alert('User Register Successfully')
+        clearRef.current.value = ''
+        setEmail('')
+        setName('')
+        setOtp('')
+        setMobileNo('')
+        setTeamLeaderName('')
+        setMember1('')
+        setMember2('')
+        setMember3('')
+        setMember4('')
+        setPassword('')
+        setConfirmPassword('')
+        
+      })
+      .catch(err => console.log(err))
+  }
 
   return (
     <Wrapper>
@@ -237,33 +292,31 @@ const Registration = () => {
         <select
           className="form-select"
           id="role"
+          name='role'
           value={role}
           onChange={handleRoleChange}
         >
-          <option value="">Select a role</option>
+          <option >Select Role</option>
           <option value="student">Student</option>
           <option value="admin">Admin</option>
           <option value="judge">Judge</option>
         </select>
       </div>
 
+      <form>
 
-      {role === 'student' && (
-
-      <form onSubmit={handleFormSubmit} >
-
-      <div className="mb-3">
-          <label className="form-label"></label>
+        <div className="mb-3">
+          <label className="form-label">Type:</label>
           <div className="d-flex justify-content-center">
             <div className="form-check form-check-inline">
               <input
                 type="radio"
                 className="form-check-input"
                 id="individual"
-                name="registrationType"
+                name="type"
                 value="individual"
-                checked={registrationType === 'individual'}
-                onChange={handleRegistrationTypeChange}
+                checked={type === 'individual'}
+                onChange={(e) => setType(e.target.value)}
               />
               <label className="form-check-label" htmlFor="individual">
                 Individual
@@ -274,10 +327,10 @@ const Registration = () => {
                 type="radio"
                 className="form-check-input"
                 id="team"
-                name="registrationType"
+                name="type"
                 value="team"
-                checked={registrationType === 'team'}
-                onChange={handleRegistrationTypeChange}
+                checked={type === 'team'}
+                onChange={(e) => setType(e.target.value)}
               />
               <label className="form-check-label" htmlFor="team">
                 Team
@@ -286,635 +339,212 @@ const Registration = () => {
           </div>
         </div>
 
-        {/* ... (other form fields) */}
-        {registrationType === 'team' && (
+
+        {type === 'team' && (
           <>
             <div className="mb-3">
               <label htmlFor="teamLeaderName" className="form-label">
                 Team Leader Name
               </label>
-              <input type="text" className="form-control" id="teamLeaderName" placeholder="Team Leader Name" />
+              <input type="text" className="form-control" id="teamLeaderName" ref={clearRef} placeholder="Team Leader Name" name='teamLeaderName' value={teamLeaderName} onChange={(e) => setTeamLeaderName(e.target.value)} />
             </div>
             <div className="mb-3">
               <label htmlFor="teamMember1" className="form-label">
                 Team Member 1
               </label>
-              <input type="text" className="form-control" id="teamMember1" placeholder="Team Member 1" />
+              <input type="text" className="form-control" id="teamMember1" ref={clearRef} placeholder="Team Member 1" name='member1' value={member1} onChange={(e) => setMember1(e.target.value)} />
             </div>
             <div className="mb-3">
               <label htmlFor="teamMember2" className="form-label">
                 Team Member 2
               </label>
-              <input type="text" className="form-control" id="teamMember2" placeholder="Team Member 2" />
+              <input type="text" className="form-control" id="teamMember2" ref={clearRef} placeholder="Team Member 2" name='member2' value={member2} onChange={(e) => setMember2(e.target.value)} />
             </div>
             <div className="mb-3">
               <label htmlFor="teamMember3" className="form-label">
                 Team Member 3
               </label>
-              <input type="text" className="form-control" id="teamMember3" placeholder="Team Member 3" />
+              <input type="text" className="form-control" id="teamMember3" ref={clearRef} placeholder="Team Member 3" name='member3' value={member3} onChange={(e) => setMember3(e.target.value)} />
             </div>
             <div className="mb-3">
               <label htmlFor="teamMember4" className="form-label">
                 Team Member 4
               </label>
-              <input type="text" className="form-control" id="teamMember4" placeholder="Team Member 4" />
+              <input type="text" className="form-control" id="teamMember4" ref={clearRef} placeholder="Team Member 4" name='member4' value={member4} onChange={(e) => setMember4(e.target.value)} />
             </div>
           </>
         )}
-        
-        {registrationType === 'individual' && (
-            <div className="mb-3">
-              <label htmlFor="name" className="form-label">
-                Name
-              </label>
-              <input type="text" className="form-control" id="name" placeholder="Name" />
+
+        {type === 'individual' && (
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">
+              Name
+            </label>
+            <input type="text" className="form-control" id="name" ref={clearRef} placeholder="Name" name='name' value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+        )}
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">
+            Email
+          </label>
+          <input type="email" className="form-control" id="email" ref={clearRef} placeholder="Email" name='email' value={email} onChange={handleEmailChange} />
+        </div>
+
+        {showOtpButton && (
+          <div className="mb-3 d-flex align-items-center">
+            <button className="btn btn-secondary" onClick={(e) => sendEmail(e)}>
+              Send OTP
+            </button>
+            <label htmlFor="otp" className="form-label">
+              OTP
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="otp"
+              placeholder="Enter 4-digit OTP"
+              value={otp}
+              onChange={handleOtpChange}
+              maxLength={4}
+            />
+            <button className="btn btn-primary btn-submit-otp" onClick={(e) => handleSendOtp(e)} disabled={!otp || otp.length !== 4}>
+              Submit
+            </button>
+          </div>
+        )}
+
+        {isOtpVerified && (
+          <div className="popup success">
+            <div className="popup-content">
+              <span className="close" onClick={closePopup}>
+                &times;
+              </span>
+              Verification Done
+            </div>
+          </div>
+        )}
+
+        {isInvalidOtp && (
+          <div className="popup error">
+            <div className="popup-content">
+              <span className="close" onClick={closePopup}>
+                &times;
+              </span>
+              Invalid OTP
+            </div>
+          </div>
+        )}
+
+        <div className="mb-3">
+          <label htmlFor="mobile" className="form-label">
+            Mobile No
+          </label>
+          <input type="number" className="form-control" id="mobile" ref={clearRef} placeholder="Mobile No" name='mobileNo' value={mobileNo} onChange={(e) => setMobileNo(e.target.value)} />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <div className="input-group">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className="form-control"
+              id="password"
+              placeholder="Password"
+              ref={clearRef}
+              name='password'
+              value={password}
+              onChange={handlePasswordChange}
+
+            />
+            <button
+              type="button"
+              className="btn btn-light"
+              onClick={handleTogglePassword}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          <div className="password-strength-bar">
+            <div
+              className="strength-indicator"
+              style={{
+                width: `${(password.length / 12) * 100}%`,
+                backgroundColor: getPasswordStrengthColor(
+                  calculatePasswordStrength(password)
+                ),
+              }}
+            ></div>
+          </div>
+          <div className={`password-strength-text ${calculatePasswordStrength(password)}`}>
+            {password.length === 0 ? 'Password Strength' : getPasswordStrengthText(calculatePasswordStrength(password))}
+          </div>
+          {!isValidPassword(password) && (
+            <div className="error-text changebyrishi">
+              * Password must be at least 8 characters, contain at least one special character, one number, one capital and one lowercase letter.
             </div>
           )}
+        </div>
+
         <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
+          <label htmlFor="confirmPassword" className="form-label">
+            Confirm Password
           </label>
           <input
-              type="email"
-              className="form-control"
-              id="email"
-              placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
-            />        </div>
-        
-       
-      {showOtpButton && (
-                <div className="mb-3 d-flex align-items-center">
+            type="password"
+            className="form-control"
+            id="confirmPassword"
+            ref={clearRef}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+          />
+          {confirmPassword !== password && confirmPassword && (
+            <div className="error-text">*Passwords do not match.</div>
+          )}
+        </div>
 
-        <button type="button" className="btn btn-secondary" onClick={handleSendOtp}>
-          Send OTP
-        </button>
-      
-       
-       
-        
-            <label htmlFor="otp" className="form-label">
-              OTP
-            </label>
-            <input
-              type="number"
-              className="form-control input-otp"
-              id="otp"
-              placeholder="Enter 4-digit OTP"
-              value={otp}
-              onChange={handleOtpChange}
-              maxLength={4}
-            />
-        
-          <button type="submit" className="btn btn-primary btn-submit-otp"  onClick={handleOtpVerification}  disabled={!otp || otp.length !== 4} >
-              Submit
+
+        {/* Add reCAPTCHA */}
+        <div className="container">
+          <header>Captcha Verification</header>
+          <div className="input_field captch_box">
+            <input type="text" value={captcha} disabled />
+            <button className="refresh_button" onClick={handleRefreshCaptcha}>
+              <i className="fa-solid fa-rotate-right"></i>
             </button>
-           
-      
           </div>
-      )}
-          {isOtpVerified && (
-        <div className="popup success">
-          <div className="popup-content">
-            <span className="close" onClick={closePopup}>
-              &times;
-            </span>
-            Verification Done
+          <div className="input_field captch_input">
+            <input type="text" placeholder="Enter captcha" onChange={handleCaptchaChange} />
           </div>
-        </div>
-      )}
 
-      {isInvalidOtp && (
-        <div className="popup error">
-          <div className="popup-content">
-            <span className="close" onClick={closePopup}>
-              &times;
-            </span>
-            Invalid OTP
+          <div className={`message ${showCaptchaMessage ? 'active' : ''}`}>
+            {showCaptchaMessage}
           </div>
+
+          <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
+            <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
+          </div>
+
         </div>
-      )}
-
-
-
-
-        <div className="mb-3">
-          <label htmlFor="mobile" className="form-label">
-            Mobile No
-          </label>
-          <input type="text" className="form-control" id="mobile" placeholder="Mobile No" />
-        </div>
-       
-     
-
-        <div className="mb-3">
-  <label htmlFor="password" className="form-label">
-    Password
-  </label>
-  <div className="input-group">
-    <input
-      type={showPassword ? 'text' : 'password'}
-      className="form-control"
-      id="password"
-      placeholder="Password"
-      value={password}
-      onChange={handlePasswordChange}
-    />
-    <button
-      type="button"
-      className="btn btn-light"
-      onClick={handleTogglePassword}
-    >
-      {showPassword ? <FaEyeSlash /> : <FaEye />}
-    </button>
-  </div>
-  <div className="password-strength-bar">
-    <div
-      className="strength-indicator"
-      style={{
-        width: `${(password.length / 12) * 100}%`,
-        backgroundColor: getPasswordStrengthColor(
-          calculatePasswordStrength(password)
-        ),
-      }}
-    ></div>
-  </div>
-
-  <div className={`password-strength-text ${calculatePasswordStrength(password)}`}>
-  {password.length === 0 ? 'Password Strength' : getPasswordStrengthText(calculatePasswordStrength(password))}
-</div>
-  
-  {!isValidPassword(password) && (
-    <div className="error-text changebyrishi">
-      * Password must be at least 8 characters, contain at least one special
-      character, one number, one capital and one lowercase letter.
-    </div>
-  )}
-</div>
-
-
-      <div className="mb-3">
-        <label htmlFor="confirmPassword" className="form-label">
-          Confirm Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          id="confirmPassword"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={handleConfirmPasswordChange}
-        />
-        {confirmPassword !== password && confirmPassword && (
-          <div className="error-text">*Passwords do not match.</div>
-        )}
-      </div>
-
-
-         {/* Add reCAPTCHA */}
-         {/* Captcha Generator */}
-         <div className="container">
-        <header>Captcha Verification</header>
-        <div className="input_field captch_box">
-          <input type="text" value={captcha} disabled />
-          <button className="refresh_button" onClick={handleRefreshCaptcha}>
-            <i className="fa-solid fa-rotate-right"></i>
-          </button>
-        </div>
-        <div className="input_field captch_input">
-          <input type="text" placeholder="Enter captcha" onChange={handleCaptchaChange} />
-        </div>
-
-        <div className={`message ${showCaptchaMessage ? 'active' : ''}`}>
-  {showCaptchaMessage}
-</div>
-      
-      <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
-        <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
-      </div>
-
-      </div>
-
-
-      { email && mobile && password && confirmPassword && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct' ? (
-  <button type="submit" className="btn btn-primary">
-    Register
-  </button>
-) : (
-  <button type="button" className="btn btn-primary" disabled>
-    Register
-  </button>
-)}
-
-        
-         {/* when need use navlink here at place of span login
-         <NavLink to="#" className="login-link">
-  <span className="login-text">Login</span>
-</NavLink>
-         */}
-         <div className="already-have-account">
-        Already have an account? <NavLink to={"/login"}className="login-text">Login</NavLink>
-      </div>
-
-        
-      </form  >
-            )}
-
-               {/*this is for admin*/}
-
-               {role === 'admin' && (
-        <form  onSubmit={handleFormSubmit}>
-          {/* ... (additional form fields for admin) */}
-
-          <div className="mb-3">
-        <label htmlFor="name" className="form-label">
-          Name
-        </label>
-        <input type="text" className="form-control" id="name" placeholder="Name" />
-      </div>
-
-         
-      <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-              type="email"
-              className="form-control"
-              id="email"
-              placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
-            />        </div>
-        
-       
-      {showOtpButton && (
-                <div className="mb-3 d-flex align-items-center">
-
-        <button type="button" className="btn btn-secondary" onClick={handleSendOtp}>
-          Send OTP
-        </button>
-      
-       
-       
-        
-            <label htmlFor="otp" className="form-label">
-              OTP
-            </label>
-            <input
-              type="number"
-              className="form-control input-otp"
-              id="otp"
-              placeholder="Enter 4-digit OTP"
-              value={otp}
-              onChange={handleOtpChange}
-              maxLength={4}
-            />
-        
-          <button type="submit" className="btn btn-primary btn-submit-otp"  onClick={handleOtpVerification}  disabled={!otp || otp.length !== 4} >
-              Submit
+        {email && mobile && password && confirmPassword && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct'
+          ? (
+            <button className="btn btn-primary mt-2" onClick={(e) => handlesubmit(e)}>
+              Register
             </button>
-           
-      
-          </div>
-      )}
-          {isOtpVerified && (
-        <div className="popup success">
-          <div className="popup-content">
-            <span className="close" onClick={closePopup}>
-              &times;
-            </span>
-            Verification Done
-          </div>
-        </div>
-      )}
-
-      {isInvalidOtp && (
-        <div className="popup error">
-          <div className="popup-content">
-            <span className="close" onClick={closePopup}>
-              &times;
-            </span>
-            Invalid OTP
-          </div>
-        </div>
-      )}
-
-
-
-
-        <div className="mb-3">
-          <label htmlFor="mobile" className="form-label">
-            Mobile No
-          </label>
-          <input type="text" className="form-control" id="mobile" placeholder="Mobile No" />
-        </div>
-     
-
-        <div className="mb-3">
-  <label htmlFor="password" className="form-label">
-    Password
-  </label>
-  <div className="input-group">
-    <input
-      type={showPassword ? 'text' : 'password'}
-      className="form-control"
-      id="password"
-      placeholder="Password"
-      value={password}
-      onChange={handlePasswordChange}
-    />
-    <button
-      type="button"
-      className="btn btn-light"
-      onClick={handleTogglePassword}
-    >
-      {showPassword ? <FaEyeSlash /> : <FaEye />}
-    </button>
-  </div>
-  <div className="password-strength-bar">
-    <div
-      className="strength-indicator"
-      style={{
-        width: `${(password.length / 12) * 100}%`,
-        backgroundColor: getPasswordStrengthColor(
-          calculatePasswordStrength(password)
-        ),
-      }}
-    ></div>
-  </div>
-  {!isValidPassword(password) && (
-    <div className="error-text">
-      * Password must be at least 8 characters, contain at least one special
-      character, one number, one capital and one lowercase letter.
-    </div>
-  )}
-</div>
-
-
-      <div className="mb-3">
-        <label htmlFor="confirmPassword" className="form-label">
-          Confirm Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          id="confirmPassword"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={handleConfirmPasswordChange}
-        />
-        {confirmPassword !== password && confirmPassword && (
-          <div className="error-text">*Passwords do not match.</div>
-        )}
-      </div>
-
-
-         {/* Add reCAPTCHA */}
-         {/* Captcha Generator */}
-         <div className="container">
-        <header>Captcha Generator</header>
-        <div className="input_field captch_box">
-          <input type="text" value={captcha} disabled />
-          <button className="refresh_button" onClick={handleRefreshCaptcha}>
-            <i className="fa-solid fa-rotate-right"></i>
-          </button>
-        </div>
-        <div className="input_field captch_input">
-          <input type="text" placeholder="Enter captcha" onChange={handleCaptchaChange} />
-        </div>
-
-        <div className={`message ${showCaptchaMessage ? 'active' : ''}`}>
-  {showCaptchaMessage}
-</div>
-      
-      <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
-        <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
-      </div>
-
-      </div>
-
-
-      { email && mobile && password && confirmPassword && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct' ? (
-  <button type="submit" className="btn btn-primary">
-    Register
-  </button>
-) : (
-  <button type="button" className="btn btn-primary" disabled>
-    Register
-  </button>
-)}
-
-        
-         {/* when need use navlink here at place of span login
-         <NavLink to="#" className="login-link">
-  <span className="login-text">Login</span>
-</NavLink>
-         */}
-         <div className="already-have-account">
-        Already have an account? <span className="login-text">Login</span>
-      </div>
-
-
-        </form>
-      )}
-
-
-         {/* This is for judge page */}
-
-         {role === 'judge' && (
-        <form  onSubmit={handleFormSubmit}>
-          {/* ... (additional form fields for admin) */}
-
-          <div className="mb-3">
-        <label htmlFor="name" className="form-label">
-          Name
-        </label>
-        <input type="text" className="form-control" id="name" placeholder="Name" />
-      </div>
-
-         
-      <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-              type="email"
-              className="form-control"
-              id="email"
-              placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
-            />        </div>
-        
-       
-      {showOtpButton && (
-                <div className="mb-3 d-flex align-items-center">
-
-        <button type="button" className="btn btn-secondary" onClick={handleSendOtp}>
-          Send OTP
-        </button>
-      
-       
-       
-        
-            <label htmlFor="otp" className="form-label">
-              OTP
-            </label>
-            <input
-              type="number"
-              className="form-control input-otp"
-              id="otp"
-              placeholder="Enter 4-digit OTP"
-              value={otp}
-              onChange={handleOtpChange}
-              maxLength={4}
-            />
-        
-          <button type="submit" className="btn btn-primary btn-submit-otp"  onClick={handleOtpVerification}  disabled={!otp || otp.length !== 4} >
-              Submit
+          ) : (
+            <button className="btn btn-primary mt-2" onClick={(e) => handlesubmit(e)} disabled>
+              Register
             </button>
-           
-      
-          </div>
-      )}
-          {isOtpVerified && (
-        <div className="popup success">
-          <div className="popup-content">
-            <span className="close" onClick={closePopup}>
-              &times;
-            </span>
-            Verification Done
-          </div>
-        </div>
-      )}
-
-      {isInvalidOtp && (
-        <div className="popup error">
-          <div className="popup-content">
-            <span className="close" onClick={closePopup}>
-              &times;
-            </span>
-            Invalid OTP
-          </div>
-        </div>
-      )}
-
-
-
-
-        <div className="mb-3">
-          <label htmlFor="mobile" className="form-label">
-            Mobile No
-          </label>
-          <input type="text" className="form-control" id="mobile" placeholder="Mobile No" />
-        </div>
-       
-     
-
-        <div className="mb-3">
-  <label htmlFor="password" className="form-label">
-    Password
-  </label>
-  <div className="input-group">
-    <input
-      type={showPassword ? 'text' : 'password'}
-      className="form-control"
-      id="password"
-      placeholder="Password"
-      value={password}
-      onChange={handlePasswordChange}
-    />
-    <button
-      type="button"
-      className="btn btn-light"
-      onClick={handleTogglePassword}
-    >
-      {showPassword ? <FaEyeSlash /> : <FaEye />}
-    </button>
-  </div>
-  <div className="password-strength-bar">
-    <div
-      className="strength-indicator"
-      style={{
-        width: `${(password.length / 12) * 100}%`,
-        backgroundColor: getPasswordStrengthColor(
-          calculatePasswordStrength(password)
-        ),
-      }}
-    ></div>
-  </div>
-  {!isValidPassword(password) && (
-    <div className="error-text">
-      * Password must be at least 8 characters, contain at least one special
-      character, one number, one capital and one lowercase letter.
-    </div>
-  )}
-</div>
-
-
-      <div className="mb-3">
-        <label htmlFor="confirmPassword" className="form-label">
-          Confirm Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          id="confirmPassword"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={handleConfirmPasswordChange}
-        />
-        {confirmPassword !== password && confirmPassword && (
-          <div className="error-text">*Passwords do not match.</div>
-        )}
-      </div>
-
-
-          {/* Add reCAPTCHA */}
-         {/* Captcha Generator */}
-         <div className="container">
-        <header>Captcha Generator</header>
-        <div className="input_field captch_box">
-          <input type="text" value={captcha} disabled />
-          <button className="refresh_button" onClick={handleRefreshCaptcha}>
-            <i className="fa-solid fa-rotate-right"></i>
-          </button>
-        </div>
-        <div className="input_field captch_input">
-          <input type="text" placeholder="Enter captcha" onChange={handleCaptchaChange} />
+          )
+        }
+        <div className="already-have-account">
+          {/* <span className="login-text">Login</span> */}
+          Already have an account? <NavLink className="navbar-brand nav_brands login-text" to={'/login'}>Login</NavLink>
         </div>
 
-        <div className={`message ${showCaptchaMessage ? 'active' : ''}`}>
-  {showCaptchaMessage}
-</div>
-      
-      <div className={`input_field button ${showSubmitButton ? 'enabled' : 'disabled'}`}>
-        <button onClick={handleSubmitCaptcha}>Submit Captcha</button>
-      </div>
-
-      </div>
-
-
-      { email && mobile && password && confirmPassword && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct' ? (
-  <button type="submit" className="btn btn-primary">
-    Register
-  </button>
-) : (
-  <button type="button" className="btn btn-primary" disabled>
-    Register
-  </button>
-)}
-
-        
-         <div className="already-have-account">
-        Already have an account? <span className="login-text">Login</span>
-      </div>
-
-
-        </form>
-      )}
+      </form>
 
     </Wrapper>
   );
@@ -923,6 +553,7 @@ const Registration = () => {
 const Wrapper = styled.section`
 @media (max-width: 800px){
   width: 80%;
+  margin: auto;
 }
     width: 50%;
   margin: auto;
@@ -1245,13 +876,17 @@ header {
 }
 
 background: url(${Bg}) no-repeat center center fixed;
-    background-size: cover;
+     background-size: cover;
 
 .login-text {
   color: blue; /* or any other color you prefer */
   /* Add any other styles you want for the login text */
 }
 
+  
+
+ 
+
 `;
 
-export default Registration; 
+export default Registration;
