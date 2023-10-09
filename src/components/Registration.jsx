@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { NavLink } from 'react-router-dom'
+import { NavLink,useNavigate } from 'react-router-dom'
 import styled from 'styled-components';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 import Bg from '../../public/pratik/images/bg.jpg';
-
 
 const Registration = () => {
 
@@ -35,7 +34,7 @@ const Registration = () => {
   const [enteredCaptcha, setEnteredCaptcha] = useState('');
 
 
-
+  const navigate=useNavigate()
 
   const handleEmailChange = (event) => {
     const enteredEmail = event.target.value;
@@ -278,6 +277,7 @@ const Registration = () => {
         setMember4('')
         setPassword('')
         setConfirmPassword('')
+        navigate('/login')
       })
       .catch(err => console.log(err))
   }
@@ -529,7 +529,7 @@ const Registration = () => {
           </div>
 
         </div>
-        {email && mobile && password && confirmPassword && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct'
+        {email && mobile && password && confirmPassword  && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct'
           ? (
             <button className="btn btn-primary mt-2" onClick={(e) => handlesubmit(e)}>
               Register
