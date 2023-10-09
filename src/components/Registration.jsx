@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { NavLink } from 'react-router-dom'
+import { NavLink,useNavigate } from 'react-router-dom'
 import styled from 'styled-components';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
@@ -34,7 +34,7 @@ const Registration = () => {
   const [showCaptchaMessage, setShowCaptchaMessage] = useState('');
   const [enteredCaptcha, setEnteredCaptcha] = useState('');
 
-
+   const navigate=useNavigate()
 
 
   const handleEmailChange = (event) => {
@@ -276,7 +276,7 @@ const Registration = () => {
         setMember4('')
         setPassword('')
         setConfirmPassword('')
-        
+        navigate('/login')
       })
       .catch(err => console.log(err))
   }
