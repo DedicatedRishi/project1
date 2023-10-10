@@ -8,10 +8,13 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const [isLoginButtonVisible, setIsLoginButtonVisible] = useState(true);
+
+
  // Captcha related state variables
  const [captcha, setCaptcha] = useState(generateCaptcha());
  const [isCaptchaEntered, setIsCaptchaEntered] = useState(true);
- const [isCaptchaSubmitted, setIsCaptchaSubmitted] = useState(true);
+ const [isCaptchaSubmitted, setIsCaptchaSubmitted] = useState(false);
  const [showCaptchaMessage, setShowCaptchaMessage] = useState('');
  const [enteredCaptcha, setEnteredCaptcha] = useState('');
 
@@ -51,8 +54,11 @@ const Login = () => {
 
  // Handler for refreshing the captcha
  const handleRefreshCaptcha = () => {
-  setCaptcha(generateCaptcha());
+  if (!isCaptchaSubmitted) {
+    setCaptcha(generateCaptcha());
+  }
 };
+
 
   // Handler for captcha input change
   const handleCaptchaChange = (event) => {
@@ -63,22 +69,25 @@ const Login = () => {
 
   
   // Handler for submitting the captcha
-  const handleSubmitCaptcha = () => {
+  const handleSubmitCaptcha = (event) => {
+    event.preventDefault();  // Prevent the default form submission behavior
+  
     const correctCaptcha = captcha;
-
+  
     if (enteredCaptcha === correctCaptcha) {
       setShowCaptchaMessage('Entered captcha is correct');
-      setIsCaptchaSubmitted(true); // Update captcha submission state
-      checkSubmitAvailability(); // Check submit availability after captcha submission
-
-      // Enable the submit button after successful captcha submission
+      setIsCaptchaSubmitted(true);
+      checkSubmitAvailability();
+      setIsLoginButtonVisible(true);
       setIsSubmitEnabled(true);
     } else {
       setShowCaptchaMessage('Entered captcha is wrong');
-      setIsCaptchaSubmitted(false); // Update captcha submission state if captcha is incorrect
-      setIsSubmitEnabled(false); // Disable the submit button if captcha is incorrect
+      setIsCaptchaSubmitted(false);
+      setIsSubmitEnabled(false);
+      setIsLoginButtonVisible(false);
     }
   };
+  
 
 
 
@@ -110,6 +119,8 @@ const Login = () => {
     setEnteredCaptcha('');
     setIsSubmitEnabled(false); // Disable the submit button after submission
   };
+
+  
 
   return (
     <Wrapper>
@@ -175,11 +186,18 @@ const Login = () => {
 
       </div>
 
-      <div className="professional-button">
-  <button type="submit">
-    Login
-  </button>
+      <div className={`professional-button ${isLoginButtonVisible ? 'visible' : 'hidden'}`}>
+        <button type="submit" disabled={!isSubmitEnabled}>
+          Login
+        </button>
+
+
+
+      </div>
+<div className="forgot-password-link">
+  <a href="/forgot-password">Forgot Password</a>
 </div>
+
 
 
       
