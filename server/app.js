@@ -57,6 +57,11 @@ app.post('/login', (req, res) => {
 app.post('/register', async (req, res) => {
     try {
         const { role, type, teamLeaderName, member1, member2, member3, member4, name, email, mobileNo, password } = req.body;
+        const existingUser = await UserModel.findOne({ email });
+        if (existingUser) {
+            // User with the same email already exists
+            return res.status(400).json({ msg: 'User with this email already exists.' });
+          }
         if (!email || !password) {
             return res.status(400).json({ message: 'Name, Email, and Password are required fields.' });
         }

@@ -32,7 +32,7 @@ const Registration = () => {
   const [isCaptchaSubmitted, setIsCaptchaSubmitted] = useState(true);
   const [showCaptchaMessage, setShowCaptchaMessage] = useState('');
   const [enteredCaptcha, setEnteredCaptcha] = useState('');
-
+  const [authOtp,setAuthOtp]=useState(false)
 
   const navigate=useNavigate()
 
@@ -53,6 +53,7 @@ const Registration = () => {
     if (userotp == otp) {
       setIsOtpVerified(true);
       setIsInvalidOtp(false);
+      setAuthOtp(true)
     }
     else {
       setIsOtpVerified(false);
@@ -279,7 +280,13 @@ const Registration = () => {
         setConfirmPassword('')
         navigate('/login')
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        if (err.response && err.response.status === 400){
+          alert('User with this email already exists.')
+        }else {
+          console.error(err);
+        }
+      })
   }
 
   return (
@@ -297,48 +304,51 @@ const Registration = () => {
           value={role}
           onChange={handleRoleChange}
         >
-          <option >Select Role</option>
+          <optgroup label='Select Role'>
           <option value="student">Student</option>
           <option value="admin">Admin</option>
           <option value="judge">Judge</option>
+          </optgroup>
         </select>
       </div>
 
       <form>
-
-        <div className="mb-3">
-          <label className="form-label">Type:</label>
-          <div className="d-flex justify-content-center">
-            <div className="form-check form-check-inline">
-              <input
-                type="radio"
-                className="form-check-input"
-                id="individual"
-                name="type"
-                value="individual"
-                checked={type === 'individual'}
-                onChange={(e) => setType(e.target.value)}
-              />
-              <label className="form-check-label" htmlFor="individual">
-                Individual
-              </label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input
-                type="radio"
-                className="form-check-input"
-                id="team"
-                name="type"
-                value="team"
-                checked={type === 'team'}
-                onChange={(e) => setType(e.target.value)}
-              />
-              <label className="form-check-label" htmlFor="team">
-                Team
-              </label>
-            </div>
-          </div>
-        </div>
+        {role=="student"|| "judge"&&(
+           <div className="mb-3">
+           <label className="form-label">Type:</label>
+           <div className="d-flex justify-content-center">
+             <div className="form-check form-check-inline">
+               <input
+                 type="radio"
+                 className="form-check-input"
+                 id="individual"
+                 name="type"
+                 value="individual"
+                 checked={type === 'individual'}
+                 onChange={(e) => setType(e.target.value)}
+               />
+               <label className="form-check-label" htmlFor="individual">
+                 Individual
+               </label>
+             </div>
+             <div className="form-check form-check-inline">
+               <input
+                 type="radio"
+                 className="form-check-input"
+                 id="team"
+                 name="type"
+                 value="team"
+                 checked={type === 'team'}
+                 onChange={(e) => setType(e.target.value)}
+               />
+               <label className="form-check-label" htmlFor="team">
+                 Team
+               </label>
+             </div>
+           </div>
+         </div>
+        )}
+        
 
 
         {type === 'team' && (
@@ -529,7 +539,7 @@ const Registration = () => {
           </div>
 
         </div>
-        {email && mobile && password && confirmPassword  && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct'
+        {email && mobile && password && confirmPassword && authOtp && isCaptchaEntered && isCaptchaSubmitted && showCaptchaMessage === 'Entered captcha is correct'
           ? (
             <button className="btn btn-primary mt-2" onClick={(e) => handlesubmit(e)}>
               Register
