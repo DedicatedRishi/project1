@@ -313,7 +313,7 @@ const Registration = () => {
       </div>
 
       <form>
-        {role=="student"|| "judge"&&(
+        {role=="admin"||role=="judge"?(
            <div className="mb-3">
            <label className="form-label">Type:</label>
            <div className="d-flex justify-content-center">
@@ -347,7 +347,7 @@ const Registration = () => {
              </div>
            </div>
          </div>
-        )}
+        ):null}
         
 
 
