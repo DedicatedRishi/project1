@@ -120,7 +120,16 @@ const Login = () => {
     setIsSubmitEnabled(false); // Disable the submit button after submission
   };
 
-  
+  const handleGoogleLogin = async () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    try {
+      await firebase.auth().signInWithPopup(provider);
+      // Handle successful Google login
+    } catch (error) {
+      // Handle errors during Google login
+      console.error('Error during Google login:', error);
+    }
+  };
 
   return (
     <Wrapper>
@@ -198,6 +207,9 @@ const Login = () => {
   <a href="/forgot-password">Forgot Password</a>
 </div>
 
+<GoogleLoginButton>
+        <button onClick={handleGoogleLogin}>Login with Google</button>
+      </GoogleLoginButton>
 
 
       
@@ -473,5 +485,34 @@ header {
   }
 `;
 
+const GoogleLoginButton = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 
+  button {
+    padding: 10px 20px;
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background-color: #357ae8;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    .icon {
+      margin-right: 10px;
+    }
+  }
+`;
 export default Login;

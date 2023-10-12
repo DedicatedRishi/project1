@@ -6,15 +6,16 @@ import './components/Login.css';
 import Login from './components/Login'
 import Dashboard from './components/Dashboard';
 import './components/Dashboard.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const App = () => {
   return (
    <>
    
-<Login />
+{/* <Login /> */}
   {/* <Registration /> */}
-  {/* <Dashboard /> */}
+  <Dashboard />
      </>
   )
   

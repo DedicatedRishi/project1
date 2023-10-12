@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 
 const Dashboard = () => {
   const users = [
-    { id: '0001', type: 'Individual', name: 'Pratik', email: 'xyz', mobile: 'xyz no.' },
+    { id: '0001', type: 'Individual', name: 'Pratik', email: 'pratik@gmail.com', mobile: '1234567890' },
     // Add more users as needed
   ];
 
@@ -258,49 +258,61 @@ const ContainerRow = styled.div`
   width: 100%;
   max-width: 100%;
   margin-top: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const CardContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between; /* Adjusted to distribute space between cards */
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center; /* Adjusted to distribute space between cards */
   gap: 20px;
   margin-top: 20px;
+  margin: auto;
   overflow-x: auto;
   width: 100%; /* Adjusted width to fill the available space */
   max-width: 100%;
   white-space: nowrap;
   padding: 20px; /* Added padding to create space around the cards */
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 
 const Card = styled.div`
-  width: 550px;
+  width: 100%;
+  max-width: 550px;
   padding: 10px;
   background: linear-gradient(135deg, #0c0c0c 0%, #252525 100%);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   border-radius: 15px;
   color: white;
+  margin-bottom: 20px;
 `;
 
 
 
 const CardTitle = styled.h3`
-  font-size: 1.8em;
-  margin-bottom: 15px;
+  font-size: 1.5em;
+  margin-bottom: 10px;
   color: #F4C542; /* Yellow color for the title */
   text-align: center;
 `;
 
 const CardBody = styled.div`
-  font-size: 1.4em;
+  font-size: 1.2em;
   color: #FFFFFF; /* White color for the body text */
 `;
 
 const DownloadButton = styled.a`
   margin-top: 15px;
-  padding: 12px 25px;
-  font-size: 1.2em;
+  padding: 10px 20px;
+  font-size: 1em;
   background-color: #4CAF50;
   color: #FFFFFF;
   border: none;
