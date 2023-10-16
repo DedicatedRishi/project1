@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   userId: {
     type: String,
     required: false,
-    unique: true,
+    // unique: true,
   },
   role: String,
   type: String,
@@ -17,11 +17,14 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required:false,
-    unique: true,
+    //unique: true,
   },
   mobileNo: String,
   password: String,
-  
+  pdf:{
+    data:Buffer,
+    contentType: String, 
+    }, 
   registrationDate: {
     type: Date,
     default: Date.now,
@@ -32,5 +35,5 @@ const userSchema = new mongoose.Schema({
  
 });
 
-const UserModel = mongoose.model('users', userSchema);
+const UserModel = mongoose.model('users', userSchema);  
 module.exports = UserModel

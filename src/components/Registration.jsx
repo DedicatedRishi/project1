@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { NavLink,useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import styled from 'styled-components';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
@@ -32,9 +32,9 @@ const Registration = () => {
   const [isCaptchaSubmitted, setIsCaptchaSubmitted] = useState(true);
   const [showCaptchaMessage, setShowCaptchaMessage] = useState('');
   const [enteredCaptcha, setEnteredCaptcha] = useState('');
-  const [authOtp,setAuthOtp]=useState(false)
+  const [authOtp, setAuthOtp] = useState(false)
 
-  const navigate=useNavigate()
+  const navigate = useNavigate()
 
   const handleEmailChange = (event) => {
     const enteredEmail = event.target.value;
@@ -281,9 +281,9 @@ const Registration = () => {
         navigate('/login')
       })
       .catch(err => {
-        if (err.response && err.response.status === 400){
+        if (err.response && err.response.status === 400) {
           alert('User with this email already exists.')
-        }else {
+        } else {
           console.error(err);
         }
       })
@@ -305,50 +305,50 @@ const Registration = () => {
           onChange={handleRoleChange}
         >
           <optgroup label='Select Role'>
-          <option value="student">Student</option>
-          <option value="admin">Admin</option>
-          <option value="judge">Judge</option>
+            <option value="student">Student</option>
+            <option value="admin">Admin</option>
+            <option value="judge">Judge</option>
           </optgroup>
         </select>
       </div>
 
       <form>
-        {role=="admin"||role=="judge"?(
-           <div className="mb-3">
-           <label className="form-label">Type:</label>
-           <div className="d-flex justify-content-center">
-             <div className="form-check form-check-inline">
-               <input
-                 type="radio"
-                 className="form-check-input"
-                 id="individual"
-                 name="type"
-                 value="individual"
-                 checked={type === 'individual'}
-                 onChange={(e) => setType(e.target.value)}
-               />
-               <label className="form-check-label" htmlFor="individual">
-                 Individual
-               </label>
-             </div>
-             <div className="form-check form-check-inline">
-               <input
-                 type="radio"
-                 className="form-check-input"
-                 id="team"
-                 name="type"
-                 value="team"
-                 checked={type === 'team'}
-                 onChange={(e) => setType(e.target.value)}
-               />
-               <label className="form-check-label" htmlFor="team">
-                 Team
-               </label>
-             </div>
-           </div>
-         </div>
-        ):null}
-        
+        {role == "admin" || role == "judge" ? (
+          <div className="mb-3">
+            <label className="form-label">Type:</label>
+            <div className="d-flex justify-content-center">
+              <div className="form-check form-check-inline">
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  id="individual"
+                  name="type"
+                  value="individual"
+                  checked={type === 'individual'}
+                  onChange={(e) => setType(e.target.value)}
+                />
+                <label className="form-check-label" htmlFor="individual">
+                  Individual
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  id="team"
+                  name="type"
+                  value="team"
+                  checked={type === 'team'}
+                  onChange={(e) => setType(e.target.value)}
+                />
+                <label className="form-check-label" htmlFor="team">
+                  Team
+                </label>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
 
 
         {type === 'team' && (

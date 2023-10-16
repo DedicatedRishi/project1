@@ -8,6 +8,7 @@ import SchoolDesign from './components/SchoolDesign';
 import LandscapeDesign from './components/LandscapeDesign';
 import Login from './components/Login';
 import Registration from './components/Registration';
+import UploadPdf from './components/UploadPdf';
 
 
 
@@ -17,7 +18,7 @@ const App = () => {
   return (
     <>
       <Header />
-      
+      <UploadPdf/>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/schooldesign' element={<SchoolDesign />} />
