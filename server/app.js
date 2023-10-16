@@ -78,6 +78,17 @@ app.post('/register', async (req, res) => {
     }
 })
 
+// get User Data
+
+ app.get('/users',async(req,res)=>{
+  try{
+    const users=await UserModel.find({},'-password')
+    res.json(users)
+  }catch(error){
+    console.log(error);
+    res.status(500).json({msg:'Server Error'})
+  }
+ });
 
 //pdf code
  

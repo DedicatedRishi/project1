@@ -9,6 +9,7 @@ import LandscapeDesign from './components/LandscapeDesign';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import UploadPdf from './components/UploadPdf';
+import Dashboard from './components/Dashboard';
 
 
 
@@ -18,16 +19,16 @@ const App = () => {
   return (
     <>
       <Header />
-      <UploadPdf/>
+      {/* <UploadPdf/> */}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/schooldesign' element={<SchoolDesign />} />
         <Route path='/landscapedesign' element={<LandscapeDesign />} />
         <Route path='/register' element={<Registration />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/dashboard' element={<Dashboard/>}/>
         </Routes>
-     
-    <Footer/>
+      <Footer/>
     </>
 
   )
