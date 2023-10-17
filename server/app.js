@@ -15,7 +15,13 @@ app.use(cors())
 
 
 // MongoDB Connection 
-mongoose.connect("mongodb://localhost:27017/user");
+//mongoose.connect("mongodb://localhost:27017/user");
+
+const DB = 'mongodb+srv://signifyteam:signifytechnologies@cluster0.hzhe076.mongodb.net/project1?retryWrites=true&w=majority';
+mongoose.connect(DB).then(() => {
+  console.log(`connection successful`);
+  
+}).catch((err) => console.log(`no connection`));
 
 //Signup and login
 app.use("/email", emailRoutes);

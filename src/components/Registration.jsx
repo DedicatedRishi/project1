@@ -313,7 +313,7 @@ const Registration = () => {
       </div>
 
       <form>
-        {role == "admin" || role == "judge" ? (
+        
           <div className="mb-3">
             <label className="form-label">Type:</label>
             <div className="d-flex justify-content-center">
@@ -347,11 +347,9 @@ const Registration = () => {
               </div>
             </div>
           </div>
-        ) : null}
+        
 
-
-
-        {type === 'team' && (
+       {type === 'team' && (
           <>
             <div className="mb-3">
               <label htmlFor="teamLeaderName" className="form-label">
@@ -386,14 +384,14 @@ const Registration = () => {
           </>
         )}
 
-        {type === 'individual' || role=="student" ?(
+        {type === 'individual' &&(
           <div className="mb-3">
             <label htmlFor="name" className="form-label">
               Name
             </label>
             <input type="text" className="form-control" id="name" ref={clearRef} placeholder="Name" name='name' value={name} onChange={(e) => setName(e.target.value)} />
           </div>
-        ):null}
+        )}
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email

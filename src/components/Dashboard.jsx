@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
-
+import Bg from '../../public/pratik/images/bg.jpg';
 const Dashboard = () => {
 
   const[users,setUsers]=useState([]);
@@ -95,7 +95,8 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  margin-top: 100px;
+  background: url(${Bg}) no-repeat center center fixed;
+  background-size: cover;
 `;
 
 
