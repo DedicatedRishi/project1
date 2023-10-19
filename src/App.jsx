@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Home from './pages/Home';
 import Footer from './components/Footer';
@@ -13,20 +12,18 @@ import Dashboard from './components/Dashboard';
 
 
 
-
-
 const App = () => {
   return (
     <>
       <Header />
-      {/* <UploadPdf/> */}
-      <Routes>
+       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/schooldesign' element={<SchoolDesign />} />
         <Route path='/landscapedesign' element={<LandscapeDesign />} />
         <Route path='/register' element={<Registration />} />
         <Route path='/login' element={<Login />} />
         <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/upload' element={<UploadPdf/>}/>
         </Routes>
       <Footer/>
     </>
