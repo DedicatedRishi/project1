@@ -14,13 +14,16 @@ const Header = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <NavLink className="nav-link active" aria-current="page" href="#" >Aboutus</NavLink>
+                            <NavLink className="nav-link" to={'/'}>Home</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink className="nav-link active" aria-current="page" to={'/about'} >Aboutus</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link" to={'/upload'}>Services</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="nav-link" href="#">Rules</NavLink>
+                            <NavLink className="nav-link" to={'/rule'}>Rules</NavLink>
                         </li>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,7 +50,7 @@ const Header = () => {
                             </ul>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="nav-link " href="#" tabIndex="-1" aria-disabled="true">Contacts</NavLink>
+                            <NavLink className="nav-link " to={'/contact'} tabIndex="-1" aria-disabled="true">Contacts</NavLink>
                         </li>
                     </ul>
                 </div>

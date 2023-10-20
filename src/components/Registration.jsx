@@ -573,7 +573,7 @@ const Wrapper = styled.section`
 
   h1 {
     font-size: 2em;
-    color: #222;
+    color: #fff;
     margin-bottom: 20px;
     text-align: center;
   }
